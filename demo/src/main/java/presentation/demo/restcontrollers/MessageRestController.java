@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import presentation.demo.models.bindmodels.MessageBindModel;
+import presentation.demo.models.entities.Message;
 import presentation.demo.models.viewmodels.MessageViewModel;
 import presentation.demo.services.MessageService;
 
@@ -38,11 +39,11 @@ public class MessageRestController {
           this.messageService.leaveMessage(model);
       }catch ( NoPermissionException e){
           message = e.getMessage();
-          ResponseEntity response = (ResponseEntity) ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
+          ResponseEntity response = ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
           return (ResponseEntity<?>) response;
       }catch (NotFoundException e) {
           message = e.getMessage();
-          ResponseEntity response = (ResponseEntity) ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+          ResponseEntity response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
           return (ResponseEntity<?>) response;
       }
 
@@ -53,6 +54,18 @@ public class MessageRestController {
     public List<MessageViewModel> getUnreadMessages(@PathVariable(value = "username")String username){
        List<MessageViewModel> list = this.messageService.getUnreadMessagesByUser(username);
        return list;
+  }
+
+  @GetMapping("/single/{id}")
+    public ResponseEntity<?> getSingleMessage(@PathVariable(value = "id")String id) {
+      MessageViewModel message = new MessageViewModel();
+      try{
+          message = this.messageService.getMessageById(id);
+      }catch (NotFoundException e){
+          ResponseEntity response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+          return response;
+      }
+      return ResponseEntity.ok(message);
   }
 
 }

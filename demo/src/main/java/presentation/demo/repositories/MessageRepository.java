@@ -14,6 +14,6 @@ public interface MessageRepository extends JpaRepository<Message,String> {
     @Query(value = "select count(m) from Message as m where m.read = false and m.recipient.username = ?1")
     long countUnreadMessagesByUser(String num);
 
-    @Query(value = "select m from Message as m where m.read=false and m.recipient.username=?1 order by m.leftAt asc")
+    @Query(value = "select m from Message as m where m.read=false and m.recipient.username=?1 order by m.leftAt desc ")
     List<Message> getUnreadMessagesByUser(String username);
 }

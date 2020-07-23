@@ -153,9 +153,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.userRepository.saveAndFlush(user);
     }
 
+//    @Override
+//    public User getByNames(String firstName, String lastName) throws NotFoundException {
+//        User user = this.userRepository.findByFirstNameAndLastName(firstName,lastName).orElseThrow(()->new NotFoundException("Не намерихме потребител с тези имена!"));
+//        return user;
+//    }
+
     @Override
-    public User getByNames(String firstName, String lastName) throws NotFoundException {
-        User user = this.userRepository.findByFirstNameAndLastName(firstName,lastName).orElseThrow(()->new NotFoundException("Не намерихме потребител с тези имена!"));
+    public User getByNamesAndPractice(String firstName, String lastName, String pName) throws NotFoundException {
+        User user = this.userRepository.findByNamesAndPractice(firstName,lastName,pName).orElseThrow(()->new NotFoundException("Не намерихме потребител с тези имена!"));
         return user;
     }
 

@@ -44,7 +44,7 @@
                 </div>
             </form>
         </div>
-        <div id="doctor2" class="row w-50 ">
+        <div id="doctor2" class="row w-50 text-center ">
             <div class="col w-50 border-left border-right">
                 <label for="firstName" class="text-left text-white">Име:</label><br>
                 <input name="firstName" type="text" class="form-control validate"
@@ -64,7 +64,7 @@
             </div>
         </div>
         <div id="doctor4" class="col w-25 border-left div-overflow ">
-            <p id="messageCount"></p>
+
         </div>
     </div>
 
@@ -76,14 +76,15 @@
     })
 
     function counter() {
+        $('#doctor4').empty();
         var username = $("#username").data('value');
 
         $.ajax({
             url: "http://localhost:8080/info/count/" + username, // A valid URL
             type: 'GET', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
             success: function (data) {
-                let message = 'Имате ' + data + ' непрочетени съобщения!';
-                $("#messageCount").append(message);
+                let message = '<p>Имате ' + data + ' непрочетени съобщения!</p>';
+                $("#doctor4").append(message);
                 var count = data;
                 if (count !== '0') {
                     getMessage(username);
@@ -97,10 +98,27 @@
             .then((json) => json.forEach((msg, idx) => {
 
              let text =
-                 '<button class="message" data-username="'+msg.id+'"><p>От:'+msg.leftFrom+'</p><p>Оставено на:'+msg.leftOn+'</p></button>';
+                 '<button class="message" data-id="'+msg.id+'"><p>От:'+msg.leftFrom+'</p><p>Оставено на:'+msg.leftOn+'</p></button>';
                   $('#doctor4').append(text);
             }));
     };
+
+    $('body').on('click','button.message',function () {
+        let num = $(this).data('id');
+        alert(num);
+        $.ajax({
+            url: "http://localhost:8080/info/single/" + num, // A valid URL
+            type: 'GET', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            success: function (data) {
+                let message = 'От: '+ data.leftFrom +'\n' + data.body +'\n'+ 'Оставено на: ' + data.leftOn;
+                alert(message);
+                counter();
+            },
+            error: function( Xhr, textStatus, errorThrown ){
+                alert( Xhr.responseText);
+            }
+        });
+    });
 
     function send() {
         let name = document.getElementById("firstName").value;

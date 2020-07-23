@@ -16,5 +16,6 @@ public interface UserService {
     List<UserViewModel>  getActiveDoctorsByPractice(String practice);
     User addMainDoctor(String username) throws NotFoundException;
     User doNormalDoctor(String username) throws NotFoundException;
-    User getByNames(String firstName,String lastName) throws NotFoundException;
+//    User getByNames(String firstName,String lastName) throws NotFoundException;
+    User getByNamesAndPractice(String firstName,String lastName,String pName) throws NotFoundException;
 }

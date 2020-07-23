@@ -13,4 +13,5 @@ public interface MessageService {
     long countMessagesByUser(String number);
     Message leaveMessage(MessageBindModel model) throws NoPermissionException, NotFoundException;
     List<MessageViewModel> getUnreadMessagesByUser(String username);
+    MessageViewModel getMessageById(String id) throws NotFoundException;
 }
