@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:include="/fragments/header"/>
+
+<body id="reportsPage">
+<div id="home">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/navigation"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-3 border-right border-bottom bg-transparent h-100">
+            <h1 class="w-100 text-light text-right">Влез в системата</h1>
+        </div>
+        <h3 th:if="${regNumber!=null}" th:text="|Успешно регистрирахте пациент с номер ${regNumber}|" class="info mt-3"></h3>
+        <div class="row tm-mt-big">
+            <div class="col-12 mx-auto tm-login-col">
+                <div class="bg-white tm-block">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <form th:action="@{/users/login}" th:method="POST"
+                                  class="tm-login-form">
+                                <div class="input-group mx-auto">
+                                    <div>
+                                        <small th:if="${logout}" class="text-danger">Успешно излязохте от профила си.</small>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="username" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Регистрационен номер*</label>
+                                    <input name="username" type="text"  class="form-control validate"
+                                           id="username" placeholder="Въведи номер">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${notExist}" th:text="${message}" class="text-danger">Грешна парола или регистрационен номер!</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mt-3">
+                                    <label for="password" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Парола*</label>
+                                    <input name="password" type="password" class="form-control validate"
+                                           id="password" placeholder="Въведи парола">
+                                </div>
+                                <div class="input-group mt-3">
+                                    <div class="mx-auto">
+                                        <small class="text-danger">Всички полета със звездичка са задължителни!</small>
+                                    </div>
+                                </div>
+                                <div class="input-group mt-3 ">
+                                    <button type="submit" class="btn btn-primary d-inline-block mx-auto">Влез</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="/fragments/footer"/>
+    </div>
+</div>
+
+</body>
+</html>

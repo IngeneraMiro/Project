@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:include="/fragments/header"/>
+
+<body>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/navigation"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 th:text="${practice.name}" class="w-100 text-light text-right"></h1>
+        </div>
+    </div>
+    <div  class="row text-white ml-5 mt-5 w-25 w-75">
+        <div class="col w-50">
+            <p th:text="${practice.name}"></p>
+            <p th:text="${practice.regNumber}" t></p>
+            <p th:text="${practice.phoneNumber}"></p>
+            <p th:text="${#temporals.format(practice.createdOn, 'dd-MM-yyyy HH:mm')}"></p>
+            <th:block th:switch="${practice.active}">
+                <p th:case="true">Активна</p>
+                <p th:case="false">Неактивна</p>
+            </th:block>
+        </div>
+
+        <div class="w-48 col">
+            <form th:object="${userBindModel}" th:action="@{/users/register(comefrom=guest)}" th:method="POST"
+                  class="tm-login-form">
+
+                <div class="input-group">
+                    <label for="firstName" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Име*</label>
+                    <input th:field="*{firstName}" name="firstName" type="text"  class="form-control validate"
+                           th:errorclass="bg-danger" id="firstName" placeholder="Въведи име">
+                    <div class="mx-auto">
+                        <div>
+                            <small th:if="${userExist}" class="text-danger">--Потребителят съществува--</small>
+                            <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger"></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mt-3">
+                    <label for="lastName" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Фамилия*</label>
+                    <input th:field="*{lastName}" name="lastName" type="text" class="form-control validate"
+                           th:errorclass="bg-danger"  id="lastName" placeholder="Въведи фамилия">
+                    <div class="mx-auto">
+                        <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></small>
+                    </div>
+                </div>
+                <div class="input-group mt-3">
+                    <label for="password" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Парола*</label>
+                    <input name="password" type="password" class="form-control validate"
+                           th:errorclass="bg-danger" id="password" placeholder="Въведи парола">
+                    <div class="mx-auto">
+                        <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></small>
+                    </div>
+                </div>
+                <div class="input-group mt-3">
+                    <label for="confirmPassword" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Потвърди парола*</label>
+                    <input name="confirmPassword" type="password" class="form-control validate"
+                           th:errorclass="bg-danger" id="confirmPassword" placeholder="Потвърди паролата">
+                    <div class="mx-auto">
+                        <small th:if="${passwornotdmatch}" class="text-danger">Паролите не съвпадат!</small>
+                    </div>
+                </div>
+                <div class="input-group mt-3">
+                    <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label" for="practice">Лекарска практика</label>
+                    <select th:field="*{practice}" id="practice" class="form-control pt-2 validate">
+                        <option th:text="${practice.name}" th:selected="${practice.name}" th:value="${practice.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="input-group mt-3">
+                    <label for="email"
+                           class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Електронна поща*</label>
+                    <input th:field="*{email}" name="email" type="email" class="form-control validate"
+                           th:errorclass="bg-danger" id="email" placeholder="Въведи поща">
+                    <div class="mx-auto">
+                        <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></small>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="mx-auto">
+                        <small class="text-danger">Всички полета със звездичка са задължителни!</small>
+                    </div>
+                </div>
+                <div class="input-group mt-3 ">
+                    <button type="submit" class="btn btn-reg d-inline-block mx-auto">Регистрирай</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+    <th:block th:include="/fragments/footer"/>
+</div>
+
+</body>
+</html>

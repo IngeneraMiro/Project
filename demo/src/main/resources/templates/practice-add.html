@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:include="/fragments/header"/>
+
+<body id="addPracticePage">
+<div id="add">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/admin-nav"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 class="w-100 text-light text-right">Регистрирай практика</h1>
+        </div>
+        <div class="row tm-mt-big">
+            <div class="col-12 mx-auto tm-login-col">
+                <div class="bg-white tm-block">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <form th:object="${practiceBindModel}" th:action="@{/practices/add}" th:method="POST"
+                                  class="tm-login-form">
+                                <div class="input-group">
+                                    <label for="name" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Име на практиката*</label>
+                                    <input th:field="*{name}" name="regNumber" type="text"  class="form-control validate"
+                                           th:errorclass="bg-danger" id="name" placeholder="Въведи име">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="regNumber" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Регистрационен номер*</label>
+                                    <input th:field="*{regNumber}" name="regNumber" type="text"  class="form-control validate"
+                                           th:errorclass="bg-danger" id="regNumber" placeholder="Въведи номер">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${#fields.hasErrors('regNumber')}" th:errors="*{regNumber}" class="text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="phoneNumber" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Телефонен номер*</label>
+                                    <input th:field="*{phoneNumber}" name="phoneNumber" type="text"  class="form-control validate"
+                                           th:errorclass="bg-danger" id="phoneNumber" placeholder="Въведи тел. номер">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="logo" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Лого*</label>
+                                    <input th:field="*{logo}" name="logo" type="text"  class="form-control validate"
+                                           th:errorclass="bg-danger" id="logo" placeholder="Лого">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${#fields.hasErrors('logo')}" th:errors="*{logo}" class="text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mt-3">
+                                    <div class="mx-auto">
+                                        <small class="text-danger">Всички полета със звездичка са задължителни!</small>
+                                    </div>
+                                </div>
+                                <div class="input-group mt-3 ">
+                                    <button type="submit" class="btn btn-primary d-inline-block mx-auto">Регистрирай</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="/fragments/footer"/>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment>
+    <nav class="navbar navbar-expand-xl navbar-light bg-transparent rounded">
+        <a class="navbar-brand" href="/admin/admin-home">
+            <h1 class="tm-site-title mb-0 text-white">Кабинет личен лекар</h1>
+        </a>
+        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <p th:text="${user.name}" class="nav-link" th:href="@{/home}"> </p>
+                </li>
+
+                <li th:if="${#session.getAttribute('pName') eq 'empty'}" class="nav-item dropdown">
+                    <p class="nav-link dropdown-toggle"  id="navbarDropdown"
+                       role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        Избери:
+                    </p>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a th:each="p: ${practices}" th:text="${p}" class="dropdown-item" th:href="@{/practices/details(pName=${p})}"></a>
+                    </div>
+                </li>
+
+            </ul>
+            <ul class="navbar-nav">
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                    <a class="nav-link d-flex" th:href="@{/practices/add}">
+                        <span>Регистрирай практика</span>
+                    </a>
+                </li>
+                <li  class="nav-item" >
+                    <a class="nav-link d-flex" th:href="@{/logout}">
+                        <span>Изход</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</th:block>

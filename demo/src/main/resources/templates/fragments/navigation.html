@@ -1,0 +1,58 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment>
+    <nav class="navbar navbar-expand-xl navbar-light bg-transparent rounded">
+        <a sec:authorize="hasRole('ANONYMOUS')" class="navbar-brand" href="/">
+            <h1 class="tm-site-title mb-0 text-white">Кабинет личен лекар</h1>
+        </a>
+        <a sec:authorize="hasRole('DOCTOR')" class="navbar-brand" href="/doctor/doctor-home">
+            <h1 class="tm-site-title mb-0 text-white">Кабинет личен лекар</h1>
+        </a>
+        <a sec:authorize="hasRole('ADMIN')" class="navbar-brand" href="/admin/admin-home">
+            <h1 class="tm-site-title mb-0 text-white">Кабинет личен лекар</h1>
+        </a>
+        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a th:unless="${user==null}"
+                           th:text="${user.name}" class="nav-link" th:href="@{/home}">
+                        </a>
+                    </li>
+
+                    <li th:if="${pName eq 'empty'}" class="nav-item dropdown">
+                        <p class="nav-link dropdown-toggle"  id="navbarDropdown"
+                           role="button" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            Избери:
+                        </p>
+                        <div id="link" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a th:each="p: ${practices}" th:text="${p}" class="dropdown-item" th:href="@{/users/register(pName=${p})}"></a>
+                        </div>
+                    </li>
+
+            </ul>
+            <ul class="navbar-nav">
+                <li th:if="${user==null}" class="nav-item">
+                    <a class="nav-link d-flex" th:href="@{/users/login}">
+                        <span>Влез</span>
+                    </a>
+                </li>
+                <li sec:authorize="hasAnyAuthority('ADMIN')" th:if=" ${#session.getAttribute('pName') ne 'empty'} " class="nav-item">
+                    <a class="nav-link d-flex" th:href="@{/users/register}">
+                        <span>Регистрация</span>
+                    </a>
+                </li>
+                <li th:if="${user!=null}" class="nav-item" >
+                    <a class="nav-link d-flex" th:href="@{/logout}">
+                        <span>Изход</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</th:block>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:include="/fragments/header">
+</th:block>
+
+<body id="registerPage">
+<div id="reg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/navigation"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 sec:authorize="hasRole('ANONYMOUS')" class="w-100 text-light text-right">Регистрирай се</h1>
+            <h1 sec:authorize="hasRole('ADMIN')" class="w-100 text-light text-right">Здравей админ !</h1>
+        </div>
+        <h3 th:if="${action eq 'pat'}" th:text="|Регистриране на пациент !|" class="info mt-3"></h3>
+        <h3 th:if="${actiondoc eq 'doc'}" th:text="|Регистриране на лекар !|" class="info mt-3"></h3>
+        <h3 th:if="${actionnurse eq 'nurse'}" th:text="|Регистриране на медицинска сестра !|" class="info mt-3"></h3>
+
+        <div class="row tm-mt-big">
+            <div class="col-12 mx-auto tm-login-col">
+                <div class="bg-white tm-block">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <form th:if="${action eq 'pat'}" th:object="${userBindModel}" th:action="@{/users/register}"
+                                  th:method="POST" class="tm-login-form">
+                                <th:block th:include="fragments/regfragment"/>
+                            </form>
+                            <form th:if="${actiondoc eq 'doc'}" th:object="${userBindModel}" th:action="@{/users/registerdoc}"
+                                  th:method="POST" class="tm-login-form">
+                                <th:block th:include="fragments/regfragment"/>
+                            </form>
+                            <form th:if="${actionnurse eq 'nurse'}" th:object="${userBindModel}" th:action="@{/users/registernurse}"
+                                  th:method="POST" class="tm-login-form">
+                                <th:block th:include="fragments/regfragment"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <th:block th:include="/fragments/footer"/>
+    </div>
+</div>
+
+</body>
+</html>
+

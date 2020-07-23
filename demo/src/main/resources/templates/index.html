@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:include="/fragments/header"/>
+
+<body id="reportsPage">
+<div id="home">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/navigation"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 class="w-100 text-light text-right ">Добре дошли</h1>
+        </div>
+        <div th:if="${logout}" class="text-white ml-2 mt-3 w-100 text-center div-logout">Вие успешно излязохте от профила си !</div>
+        <div class="row text-white ml-2 mt-5 w-25 w-75">
+            <div class="d-inline-block text-white ml-3 first-col">Ако сте регистриран потребител можте да влезете с регистрационният си номер и парола тук  --></div>
+            <div class="d-inline-block second-col "><a href="/users/login"><img class="img-index " src="/images/logos/login.png" alt="icon"></a></div>
+        </div>
+        <div class="row text-white ml-2 mt-5 w-25 w-75">
+            <div class="d-inline-block text-white ml-3 first-col">Ако сте пациент на някоя от практиките и искате да се регистрирате, изберете практика от менюто Избери  --></div>
+            <div class="d-inline-block second-col "><p id="reg" role="button" ><img class="img-index " src="/images/logos/arrow.png" alt="icon"></p></div>
+        </div>
+        <div class="row text-white ml-2 mt-5 w-25 w-75">
+            <div class="d-inline-block text-white ml-3 first-col">Ако не сте пациент на някоя от практиките но искате да се запишете за преглед, можете да направите това тук  --></div>
+            <div class="d-inline-block second-col "><a href="/users/login"><img class="img-index " src="/images/logos/apply.png" alt="icon"></a></div>
+        </div>
+
+        <th:block th:include="/fragments/footer"/>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#reg").hover(function(){
+            console.log('OK');
+            $('#navbarDropdown').trigger('click');
+        });
+    });
+
+</script>
+</body>
+</html>

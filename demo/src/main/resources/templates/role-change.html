@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:include="/fragments/header"/>
+<body>
+<div id="details">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/admin-nav"/>
+            </div>
+        </div>
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 th:text="${#session.getAttribute('pName')}" class="w-100 text-light text-right"></h1>
+        </div>
+    </div>
+    <div class="col-12 mt-2 text-white" >
+        <input type="hidden" id="practice" th:data-value="${#session.getAttribute('pName')}"/>
+        <div class="row w-100 mt-3 text-white">
+            <div class="col w-25">Регистрационен номер</div>
+            <div class="col w-25">Име</div>
+            <div class="col w-25">Роля</div>
+            <div class="col w-25">Да стане</div>
+        </div>
+        <div class="row w-100 mt-3 text-white" id = "data">
+
+        </div>
+    </div>
+    <th:block th:include="/fragments/footer"/>
+</div>
+<script src="/js/role-manipulator.js"></script>
+</body>
+</html>

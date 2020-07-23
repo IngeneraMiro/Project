@@ -1,0 +1,89 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment>
+    <div class="input-group">
+        <label for="firstName" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Име*</label>
+        <input th:field="*{firstName}" name="firstName" type="text"
+               class="form-control validate"
+               th:errorclass="bg-danger" id="firstName" placeholder="Въведи име">
+        <div class="mx-auto">
+            <div>
+                <small th:if="${userExist}" class="text-danger">--Потребителят
+                    съществува--</small>
+                <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                       class="text-danger"></small>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mt-3">
+        <label for="lastName" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Фамилия*</label>
+        <input th:field="*{lastName}" name="lastName" type="text"
+               class="form-control validate"
+               th:errorclass="bg-danger" id="lastName" placeholder="Въведи фамилия">
+        <div class="mx-auto">
+            <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                   class="text-danger"></small>
+        </div>
+    </div>
+    <div class="input-group mt-3">
+        <label for="password" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Парола*</label>
+        <input name="password" type="password" class="form-control validate"
+               th:errorclass="bg-danger" id="password" placeholder="Въведи парола">
+        <div class="mx-auto">
+            <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                   class="text-danger"></small>
+        </div>
+    </div>
+    <div class="input-group mt-3">
+        <label for="confirmPassword"
+               class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Потвърди
+            парола*</label>
+        <input name="confirmPassword" type="password" class="form-control validate"
+               th:errorclass="bg-danger" id="confirmPassword"
+               placeholder="Потвърди паролата">
+        <div class="mx-auto">
+            <small th:if="${passwornotdmatch}" class="text-danger">Вномание! Паролите които
+                сте въвели не съвпадат!</small>
+        </div>
+    </div>
+    <div class="input-group mt-3">
+        <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label" for="practice">Лекарска
+            практика</label>
+        <select th:field="*{practice}" id="practice" class="form-control pt-2 validate">
+            <option th:each="p : ${practices}" th:value="${p}"
+                    th:text="${p}" th:selected="${#session.getAttribute('pName')}">
+                Practices
+            </option>
+        </select>
+    </div>
+    <div th:if="${action eq 'pat'}" class="input-group mt-3">
+        <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label" for="doctor">Избери
+            лекар</label>
+        <select th:field="*{doctor}" id="doctor" class="form-control pt-2 validate">
+            <option th:each="d : ${doctors}" th:value="${d.lastName}"
+                    th:text="${d.lastName}" th:selected="${d.lastName}">
+                Practices
+            </option>
+        </select>
+    </div>
+    <div class="input-group mt-3">
+        <label for="email"
+               class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Електронна
+            поща*</label>
+        <input th:field="*{email}" name="email" type="email" class="form-control validate"
+               th:errorclass="bg-danger" id="email" placeholder="Въведи поща">
+        <div class="mx-auto">
+            <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                   class="text-danger"></small>
+        </div>
+    </div>
+    <div class="input-group">
+        <div class="mx-auto">
+            <small class="text-danger">Всички полета със звездичка са задължителни!</small>
+        </div>
+    </div>
+    <div class="input-group mt-3 ">
+        <button type="submit" class="btn btn-primary d-inline-block mx-auto">Регистрирай
+        </button>
+    </div>
+
+</th:block>

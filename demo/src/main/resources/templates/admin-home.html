@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:include="/fragments/header"/>
+
+<body id="reportsPage">
+<div id="home">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/admin-nav"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 class="w-100 text-light text-right ">Здравей админ !</h1>
+        </div>
+        <h3 th:if="${regNumber!=null}" th:text="|Успешно регистрирахте пациент с номер ${regNumber}|" class="info mt-3">zfsdbxb</h3>
+
+        <th:block th:include="/fragments/footer"/>
+    </div>
+</div>
+
+</body>
+</html>

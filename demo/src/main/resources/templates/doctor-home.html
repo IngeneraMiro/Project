@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:include="/fragments/header"/>
+<body>
+<div id="doc">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/doctor-nav"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 th:text="|Д-р ${#session.getAttribute('family')} |" class="w-100 text-light text-right"></h1>
+        </div>
+    </div>
+    <h3 th:if="${message!=null}" th:text="|${message}|" class="info mt-3 text-center text-white"></h3>
+    <input type="hidden" id="username" th:data-value="${number}">
+    <div class="row mt-3 w-100 text-white text-center">
+        <div id="title1" class="col w-25">
+            <p>Административни функции</p>
+        </div>
+        <div id="title2" class="row w-50">
+            <P>Оставете съобщение на</P>
+        </div>
+
+        <div id="title4" class="col w-25">
+            <p>Вашите съобщения</p>
+        </div>
+    </div>
+    <div class="row mt-3 w-100 text-white border">
+        <div id="doctor1" class="col w-25 ">
+            <form th:action="@{/doctor/add/{pName}(pName=${#session.getAttribute('pName')})}" th:method="post">
+                <input sec:authorize="hasRole('MAIN')" type="radio" id="1" name="user" value="doc">
+                <label sec:authorize="hasRole('MAIN')" for="1">Добави лекар</label><br>
+                <input type="radio" id="2" name="user" value="nurse">
+                <label for="2">Добави сестра</label><br>
+                <input type="radio" id="3" name="user" value="pat">
+                <label for="3">Добави пациент</label>
+                <div class="input-group ">
+                    <button type="submit" class="btn text-white btn-primary d-inline-block mx-3">Изпълни</button>
+                </div>
+            </form>
+        </div>
+        <div id="doctor2" class="row w-50 ">
+            <div class="col w-50 border-left border-right">
+                <label for="firstName" class="text-left text-white">Име:</label><br>
+                <input name="firstName" type="text" class="form-control validate"
+                       id="firstName" placeholder="Име">
+                <label for="middleName" class="text-left text-white">Презиме:</label><br>
+                <input name="middleName" type="text" class="form-control validate"
+                       id="middleName" placeholder="Презиме">
+                <label for="lastName" class="text-left text-white">Фамилия:</label><br>
+                <input name="lastName" type="text" class="form-control validate"
+                       id="lastName" placeholder="Фамилия">
+            </div>
+            <div class="col w-50">
+                <label class="text-left text-white" for="message">Съобщение:</label>
+                <textarea id="message" type="textarea" class="form-control" rows="5"
+                          placeholder="Съобщение"></textarea>
+                <input type="submit" onclick="send()" class="btn-primary text-white border" value="Изпрати"/>
+            </div>
+        </div>
+        <div id="doctor4" class="col w-25 border-left div-overflow ">
+            <p id="messageCount"></p>
+        </div>
+    </div>
+
+    <th:block th:include="/fragments/footer"/>
+</div>
+<script>
+    $(document).ready(function () {
+        counter();
+    })
+
+    function counter() {
+        var username = $("#username").data('value');
+
+        $.ajax({
+            url: "http://localhost:8080/info/count/" + username, // A valid URL
+            type: 'GET', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            success: function (data) {
+                let message = 'Имате ' + data + ' непрочетени съобщения!';
+                $("#messageCount").append(message);
+                var count = data;
+                if (count !== '0') {
+                    getMessage(username);
+                }
+            }
+        });
+    }
+
+    function getMessage(username) {
+        fetch('http://localhost:8080/info/unreaded/' + username).then(responce => responce.json())
+            .then((json) => json.forEach((msg, idx) => {
+
+             let text =
+                 '<button class="message" data-username="'+msg.id+'"><p>От:'+msg.leftFrom+'</p><p>Оставено на:'+msg.leftOn+'</p></button>';
+                  $('#doctor4').append(text);
+            }));
+    };
+
+    function send() {
+        let name = document.getElementById("firstName").value;
+        let surname = document.getElementById("middleName").value;
+        let lastname = document.getElementById("lastName").value;
+        let message = document.getElementById("message").value;
+        let sender = $("#username").data('value');
+
+        if(jQuery.isEmptyObject(message) || jQuery.isEmptyObject(surname) || jQuery.isEmptyObject(name) || jQuery.isEmptyObject(lastname)){
+            window.alert('Попълнете всички полета!')
+        }else {
+            alert("Да изпратя ли съобщението?")
+            let dto = {fname: name,sname: surname,tname: lastname,sendfrom: sender,mess: message}
+            $.ajax({
+                url: "http://localhost:8080/info/new", // A valid URL
+                type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+                data: JSON.stringify(dto),
+                contentType: 'application/json; charset=utf-8',// Some data e.g. Valid JSON as a string
+                success: function(data) {
+                    alert(data);
+                    $('#firstName').val('');
+                    $('#middleName').val('');
+                    $('#lastName').val('');
+                    $('#message').val('');
+                },
+                error: function( Xhr, textStatus, errorThrown ){
+                    alert( Xhr.responseText);
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

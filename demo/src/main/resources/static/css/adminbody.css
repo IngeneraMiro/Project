@@ -1,0 +1,11 @@
+body {
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+    background-image: linear-gradient(rgba(0, 0 , 0 ,0.3), rgba(0, 0 , 0 ,0.8)), url(../images/admin.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    padding-left: 50px;
+    padding-right: 50px;
+}

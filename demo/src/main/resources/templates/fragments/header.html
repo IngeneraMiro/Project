@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>GP кабинет</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+        <link  sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/css/adminbody.css">
+        <link sec:authorize="hasRole('ANONYMOUS')" rel="stylesheet" href="/css/body.css">
+        <link sec:authorize="hasRole('DOCTOR')" rel="stylesheet" href="/css/doctorbody.css">
+        <script src="/js/jquery-3.3.1.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+    </head>
+</th:block>
