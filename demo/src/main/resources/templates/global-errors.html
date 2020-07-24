@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link  rel="stylesheet" href="/css/error.css">
+</head>
+<body>
+ <div class="text-center text-white mt-5">
+    <h2>Опа, стана грешка!Боят с нея започва веднага!<br/>Моля да ни извините за неудобството!</h2>
+    <p th:text="${error}" class="mt-5"></p>
+ </div>
+</body>
+</html>

@@ -2,7 +2,6 @@ package presentation.demo.services.serviceImpl;
 
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import presentation.demo.models.bindmodels.MessageBindModel;
 import presentation.demo.models.entities.Message;
