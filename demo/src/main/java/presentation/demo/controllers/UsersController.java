@@ -135,7 +135,7 @@ public class UsersController {
     }
 
     @PostMapping("/registerdoc")
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','MAIN')")
     public String regDocConform(@Valid @ModelAttribute("userBindModel") UserBindModel userBindModel,
                              BindingResult result, RedirectAttributes redirectAttributes,HttpSession session) {
         List<String> authorities = new ArrayList<>(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
@@ -153,6 +153,10 @@ public class UsersController {
                     String message = String.format("Успешно регистрирахте лекар с регистрационен номер %s",user.getUsername());
                     redirectAttributes.addFlashAttribute("message",message);
                     return "redirect:/practices/details?pName="+URLEncoder.encode((String)session.getAttribute("pName"), StandardCharsets.UTF_8);
+                case "ROLE_MAIN":
+                    message = String.format("Успешно регистрирахте лекар с регистрационен номер %s",user.getUsername());
+                    redirectAttributes.addFlashAttribute("message",message);
+                    return "redirect:/doctor/doctor-home";
                 default:
                     return "redirect:/";
             }
@@ -185,6 +189,7 @@ public class UsersController {
             model.addAttribute("practices", Collections.singletonList(pName));
         }
         model.addAttribute("pName",pName);
+        model.addAttribute("doctors",this.userService.getActiveDoctorsByPractice(pName));
         model.addAttribute("actionnurse","nurse");
         return "user-register";
     }
@@ -208,6 +213,11 @@ public class UsersController {
                     String message = String.format("Успешно регистрирахте сестра с регистрационен номер %s",user.getUsername());
                     redirectAttributes.addFlashAttribute("message",message);
                     return "redirect:/practices/details?pName="+URLEncoder.encode((String)session.getAttribute("pName"), StandardCharsets.UTF_8);
+                case "ROLE_DOCTOR":
+                case "ROLE_MAIN":
+                    message = String.format("Успешно регистрирахте сестра с регистрационен номер %s",user.getUsername());
+                    redirectAttributes.addFlashAttribute("message",message);
+                    return "redirect:/doctor/doctor-home";
                 default:
                     return "redirect:/";
             }

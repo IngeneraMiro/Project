@@ -25,7 +25,7 @@ import java.util.Collection;
 
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             for (GrantedAuthority grantedAuthority : authorities) {
-                if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
+                if (grantedAuthority.getAuthority().equals("ROLE_PATIENT")) {
                     redirectUrl = "/patient/patient-home";
                     break;
                 } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
@@ -35,6 +35,8 @@ import java.util.Collection;
                     redirectUrl = "/doctor/doctor-home";
                 }else if(grantedAuthority.getAuthority().equals("ROLE_NURSE")){
                     redirectUrl = "/nurse/nurse-home";
+                }else{
+                    redirectUrl = "/test";
                 }
             }
             if (redirectUrl == null) {

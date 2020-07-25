@@ -55,7 +55,7 @@
             </option>
         </select>
     </div>
-    <div th:if="${action eq 'pat'}" class="input-group mt-3">
+    <div th:if="${action eq 'pat'} or ${actionnurse eq 'nurse'}" class="input-group mt-3">
         <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label" for="doctor">Избери
             лекар</label>
         <select th:field="*{doctor}" id="doctor" class="form-control pt-2 validate">

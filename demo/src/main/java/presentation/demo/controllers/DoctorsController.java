@@ -18,7 +18,7 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/doctor")
-@PreAuthorize("hasRole('DOCTOR')")
+@PreAuthorize("hasAnyRole('DOCTOR','MAIN')")
 public class DoctorsController {
     private final PracticeService practiceService;
     private final UserService userService;

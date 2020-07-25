@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import presentation.demo.models.bindmodels.MessageBindModel;
+import presentation.demo.models.bindmodels.MessageSendModel;
 import presentation.demo.models.viewmodels.MessageViewModel;
 import presentation.demo.services.MessageService;
 
@@ -37,13 +38,16 @@ public class MessageRestController {
     public ResponseEntity<?> leftNewMessage(@RequestBody String body) throws NoPermissionException, NotFoundException {
         String message = "";
         MessageBindModel model = json.fromJson(body, MessageBindModel.class);
-        try {
-            this.messageService.leaveMessage(model);
-        } catch (NoPermissionException e) {
-            message = e.getMessage();
-            ResponseEntity response = ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
-            return (ResponseEntity<?>) response;
-        }
+        this.messageService.leaveMessage(model);
+
+        return ResponseEntity.ok("Съобщението беше доставено!");
+    }
+
+    @PutMapping("/send")
+    public ResponseEntity<?> sendMessage(@RequestBody String body) throws NotFoundException, NoPermissionException {
+        String message = "";
+        MessageSendModel model = json.fromJson(body,MessageSendModel.class);
+        this.messageService.sendMessage(model);
         return ResponseEntity.ok("Съобщението беше доставено!");
     }
 
@@ -66,4 +70,9 @@ public class MessageRestController {
         return response;
     }
 
+    @ExceptionHandler(NoPermissionException.class)
+    public ResponseEntity<?> catchNotPermissionEx(NoPermissionException ex) {
+        ResponseEntity response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        return response;
+    }
 }

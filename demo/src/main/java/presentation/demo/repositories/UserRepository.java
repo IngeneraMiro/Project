@@ -24,6 +24,7 @@ public interface UserRepository extends JpaRepository<User,String> {
   @Query(value = "select u from User as u where u.firstName = ?1 and u.lastName = ?2 and u.practice.name = ?3")
   Optional<User> findByNamesAndPractice(String fName,String lName,String pName);
 
-//  Optional<User> findByFirstNameAndLastName(String firstName,String lastName);
+  @Query(value = "select u from User as u where u.doctor.username = ?1 and u.isNurse = true ")
+  User getNurseByDoc(String docUsername);
 
 }

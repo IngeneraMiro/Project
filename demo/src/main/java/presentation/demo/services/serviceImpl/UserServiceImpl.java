@@ -12,6 +12,7 @@ import presentation.demo.models.bindmodels.UserBindModel;
 import presentation.demo.models.entities.Authority;
 import presentation.demo.models.entities.User;
 import presentation.demo.models.entities.UserAuthorities;
+import presentation.demo.models.viewmodels.UserControlViewModel;
 import presentation.demo.models.viewmodels.UserViewModel;
 import presentation.demo.repositories.AuthorityRepository;
 import presentation.demo.repositories.UserRepository;
@@ -95,6 +96,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setCredentialsNonExpired(true);
         if(model.getAuthority().charAt(5)=='D'){
             user.setIsDoctor(true);
+        }else if(model.getAuthority().charAt(5)=='N'){
+            user.setIsNurse(true);
         }else {
             user.setIsDoctor(false);
         }
@@ -152,11 +155,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.userRepository.saveAndFlush(user);
     }
 
-//    @Override
-//    public User getByNames(String firstName, String lastName) throws NotFoundException {
-//        User user = this.userRepository.findByFirstNameAndLastName(firstName,lastName).orElseThrow(()->new NotFoundException("Не намерихме потребител с тези имена!"));
-//        return user;
-//    }
+    @Override
+    public UserControlViewModel getUserControlModel(String username) throws NotFoundException {
+      User user = this.userRepository.findByUsername(username).orElseThrow(()->new NotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!"));
+      UserControlViewModel model = this.mapper.map(user,UserControlViewModel.class);
+      model.setDocName("Д-р "+ user.getDoctor().getLastName());
+      User nurse = this.userRepository.getNurseByDoc(user.getDoctor().getUsername());
+      model.setNurseName("сестра "+nurse.getLastName());
+      model.setNurseNum(nurse.getUsername());
+      model.setPractice(user.getPractice().getName());
+      return model;
+    }
+
 
     @Override
     public User getByNamesAndPractice(String firstName, String lastName, String pName) throws NotFoundException {

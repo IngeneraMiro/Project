@@ -36,4 +36,13 @@ public class GlobalExceptionHandler {
         view.addObject("error","Transaction error !");
         return view;
     }
+
+    @ExceptionHandler({IllegalStateException.class})
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public ModelAndView globalIllegalErrorHandling(IllegalStateException e){
+        ModelAndView view = new ModelAndView("global-errors");
+        view.addObject("error","IllegalState error !");
+        return view;
+    }
+
 }

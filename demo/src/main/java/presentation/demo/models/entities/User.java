@@ -28,6 +28,7 @@ public class User extends BaseEntity implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
     private boolean isDoctor;
+    private boolean isNurse;
 
 
     public User() {
@@ -42,6 +43,7 @@ public class User extends BaseEntity implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.isDoctor = false;
+        this.isNurse = false;
         this.enabled = true;
     }
 
@@ -139,12 +141,22 @@ public class User extends BaseEntity implements UserDetails {
         this.doctor = doctor;
     }
 
+    @Column(name = "is_doctor")
     public boolean getIsDoctor(){
         return this.isDoctor;
     }
 
     public void setIsDoctor(boolean isDoctor){
         this.isDoctor = isDoctor;
+    }
+
+    @Column(name = "is_nurse")
+    public boolean getIsNurse() {
+        return isNurse;
+    }
+
+    public void setIsNurse(boolean nurse) {
+        isNurse = nurse;
     }
 
     public boolean isAccountNonExpired() {

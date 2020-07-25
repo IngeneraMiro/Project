@@ -34,12 +34,13 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/error")
+    @GetMapping("/test")
     public ModelAndView home(){
+        System.out.println();
 //        throw new RuntimeException("error");
-        throw new TransactionException("error");
+//        throw new TransactionException("error");
 //        throw new PersistenceException("error");
-
+          throw new IllegalStateException("error");
 
     }
 

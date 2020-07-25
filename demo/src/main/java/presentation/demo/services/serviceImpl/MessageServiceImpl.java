@@ -4,6 +4,7 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import presentation.demo.models.bindmodels.MessageBindModel;
+import presentation.demo.models.bindmodels.MessageSendModel;
 import presentation.demo.models.entities.Message;
 import presentation.demo.models.entities.User;
 import presentation.demo.models.viewmodels.MessageViewModel;
@@ -89,5 +90,19 @@ public class MessageServiceImpl implements MessageService {
         message.setRead(true);
         this.messageRepository.saveAndFlush(message);
         return model;
+    }
+
+    @Override
+    public Message sendMessage(MessageSendModel model) throws NotFoundException, NoPermissionException {
+       if(model.getReceive().charAt(0)!='N'){
+           throw new NoPermissionException("Може да изпратите съобщение на медицинската сестра!");
+       }
+       Message message = new Message();
+       message.setAuthor(this.userService.getUserByRegNumber(model.getSendfrom()));
+       message.setRecipient(this.userService.getUserByRegNumber(model.getReceive()));
+       message.setLeftAt(LocalDateTime.now());
+       message.setBody(model.getMess());
+       message.setRead(false);
+       return this.messageRepository.saveAndFlush(message);
     }
 }
