@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!") );
+        User user = this.userRepository.findUserWithUsername(username).orElseThrow(()-> new UsernameNotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!") );
         return user;
     }
 
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getUserByRegNumber(String number) throws NotFoundException {
-        User user = this.userRepository.findByUsername(number).orElse(null);
+        User user = this.userRepository.findUserWithUsername(number).orElse(null);
         if(user==null){
             throw new NotFoundException("Потребител с регистрационен номер "+number+" не беше намерен!");
         }
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserViewModel getUserByUsername(String username) {
-        User user = this.userRepository.findByUsername(username).orElse(null);
+        User user = this.userRepository.findUserWithUsername(username).orElse(null);
         return this.mapper.map(user,UserViewModel.class);
     }
 
@@ -141,14 +141,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User addMainDoctor(String username) throws NotFoundException {
-        User user = this.userRepository.findByUsername(username).orElseThrow(()->new NotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!"));
+        User user = this.userRepository.findUserWithUsername(username).orElseThrow(()->new NotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!"));
         user.addAuthority(this.authorityRepository.findByAuthority("ROLE_MAIN"));
         return this.userRepository.saveAndFlush(user);
     }
 
     @Override
     public User doNormalDoctor(String username) throws NotFoundException {
-        User user = this.userRepository.findByUsername(username).orElseThrow(()->new NotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!"));
+        User user = this.userRepository.findUserWithUsername(username).orElseThrow(()->new NotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!"));
         Set<Authority> authorities = user.getAuthorities();
         authorities.remove(this.authorityRepository.findByAuthority("ROLE_MAIN"));
         user.setAuthorities(authorities);
@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserControlViewModel getUserControlModel(String username) throws NotFoundException {
-      User user = this.userRepository.findByUsername(username).orElseThrow(()->new NotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!"));
+      User user = this.userRepository.findUserWithUsername(username).orElseThrow(()->new NotFoundException("Потребител с регистрационен номер "+username+" не беше намерен!"));
       UserControlViewModel model = this.mapper.map(user,UserControlViewModel.class);
       model.setDocName("Д-р "+ user.getDoctor().getLastName());
       User nurse = this.userRepository.getNurseByDoc(user.getDoctor().getUsername());

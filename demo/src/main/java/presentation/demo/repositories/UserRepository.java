@@ -12,19 +12,21 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,String> {
 
-  Optional<User> findByUsername(String username);
+  @Query(value = "select u from User as u where u.username = ?1")
+  Optional<User> findUserWithUsername(String username);
+
   boolean existsByUsername(String username);
 
   @Query(value = "select u from User as u where u.enabled=true and u.isDoctor = true and u.practice.name = ?1")
   List<User> getDoctorsByPractice(String practice);
 
-  @Query(value = "select u from User as u where u.enabled=true and u.isDoctor = true and u.lastName = :lName and u.practice.name = :pName")
+  @Query(value = "select u from User as u where u.enabled=true and u.isDoctor = true and u.enabled = true and u.lastName = :lName and u.practice.name = :pName")
   User getDoctorFromPractice(@Param("lName")String lastName,@Param("pName") String practice);
 
-  @Query(value = "select u from User as u where u.firstName = ?1 and u.lastName = ?2 and u.practice.name = ?3")
+  @Query(value = "select u from User as u where u.enabled = true and u.firstName = ?1 and u.lastName = ?2 and u.practice.name = ?3")
   Optional<User> findByNamesAndPractice(String fName,String lName,String pName);
 
-  @Query(value = "select u from User as u where u.doctor.username = ?1 and u.isNurse = true ")
+  @Query(value = "select u from User as u where u.doctor.username = ?1 and u.isNurse = true and u.enabled = true ")
   User getNurseByDoc(String docUsername);
 
 }
