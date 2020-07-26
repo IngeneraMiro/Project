@@ -18,12 +18,10 @@ import java.util.List;
 public class PracticeServiceImpl implements PracticeService {
     private final PracticeRepository practiceRepository;
     private final ModelMapper mapper;
-    private final PasswordEncoder encoder;
 
-    public PracticeServiceImpl(PracticeRepository practiceRepository, ModelMapper mapper, PasswordEncoder encoder) {
+    public PracticeServiceImpl(PracticeRepository practiceRepository, ModelMapper mapper) {
         this.practiceRepository = practiceRepository;
         this.mapper = mapper;
-        this.encoder = encoder;
     }
 
     @Override
