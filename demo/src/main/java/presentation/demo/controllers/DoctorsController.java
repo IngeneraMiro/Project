@@ -55,6 +55,10 @@ public class DoctorsController {
                 return "redirect:/users/registernurse?pName="+URLEncoder.encode(pName, StandardCharsets.UTF_8);
             case"pat":
                 return "redirect:/users/register?pName="+URLEncoder.encode(pName, StandardCharsets.UTF_8);
+            case "office":
+                return "redirect:/offices/add?pName="+URLEncoder.encode(pName, StandardCharsets.UTF_8);
+            case "del":
+                return "redirect:/offices/del?pName="+URLEncoder.encode(pName, StandardCharsets.UTF_8);
             default:
                 return "redirect:/";
         }

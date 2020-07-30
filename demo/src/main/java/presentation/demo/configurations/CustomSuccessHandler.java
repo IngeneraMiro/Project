@@ -31,7 +31,7 @@ import java.util.Collection;
                 } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
                     redirectUrl = "/admin/admin-home";
                     break;
-                }else if(grantedAuthority.getAuthority().equals("ROLE_DOCTOR")){
+                }else if(grantedAuthority.getAuthority().equals("ROLE_DOCTOR") || grantedAuthority.getAuthority().equals("ROLE_MAIN")){
                     redirectUrl = "/doctor/doctor-home";
                 }else if(grantedAuthority.getAuthority().equals("ROLE_NURSE")){
                     redirectUrl = "/nurse/nurse-home";

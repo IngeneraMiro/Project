@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:include="/fragments/header"/>
+<body id="addPracticePage">
+<div id="add">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/navigation"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 class="w-100 text-light text-right">Премахни офис</h1>
+        </div>
+    </div>
+    <div class="row mt-3 text-white">
+        <div id="first" class="col w-50">
+            <p th:text="|Име на практиката: ${practice.name}|"></p>
+            <p th:text="|Рер. номер: ${practice.regNumber}|"></p>
+            <p th:text="|Регистрирана на: ${#temporals.format(practice.createdOn, 'dd-MM-yyyy HH:mm')}|"></p>
+            <p th:text="|Телефон: ${practice.phoneNumber}|"></p>
+        </div>
+        <div id="second" class="col w-50">
+            <input type="hidden" id="pract" th:data-value="${pName}">
+
+        </div>
+    </div>
+    <th:block th:include="/fragments/footer"/>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var name = $("#pract").data('value');
+        getOffices(name);
+    })
+
+    function getOffices(name) {
+        fetch('http://localhost:8080/office/get/' + name).then(responce => responce.json())
+            .then((json) => json.forEach((msg, idx) => {
+
+                let text = msg.address +
+                    '<br><button class="id" data-id="' + msg.id + '">Премахни</button><br>';
+                $('#second').append(text);
+            }));
+    };
+
+    $('body').on('click','button.id',function () {
+        alert("Да изтрия ли офиса?");
+        var num = $(this).data('id');
+        $.ajax({
+            url: "http://localhost:8080/office/del/" + num,// A valid URL
+            type: 'DELETE', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            success: function(data) {
+                let message = 'Офисът е изтрит.';
+                alert(message);
+                var Pname = $("#pract").data('value');
+                $('#second').empty();
+                getOffices(Pname);
+            },
+            error: function (Xhr, textStatus, errorThrown) {
+            alert(Xhr.responseText);
+        }
+        });
+
+    })
+
+</script>
+</body>
+</html>
+
+//     $('body').on('click', 'button.id', function () {
+//     let num = $(this).data('id');
+//     alert("Да изтрия ли офиса?")
+//     $.ajax({
+//         url: "http://localhost:8080/office/del/" + num, // A valid URL
+//         type: 'DELETE', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+//         success: function (data) {
+//             let message = 'Офисът е изтрит.';
+//             alert(message);
+//             var Pname = $("#pract").data('value');
+//             $('#second').empty();
+//             getOffices(Pname);
+//         },
+//         error: function (Xhr, textStatus, errorThrown) {
+//             alert(Xhr.responseText);
+//         }
+//     });
+//
+// });

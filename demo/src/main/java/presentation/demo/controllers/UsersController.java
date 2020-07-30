@@ -2,6 +2,7 @@ package presentation.demo.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -203,7 +204,8 @@ public class UsersController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("userBindModel", userBindModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userBindModel", result);
-            return "redirect:registernurse";
+
+            return "redirect:registernurse?pName="+URLEncoder.encode(userBindModel.getPractice(), StandardCharsets.UTF_8);
         }
         userBindModel.setAuthority("ROLE_NURSE");
         try {

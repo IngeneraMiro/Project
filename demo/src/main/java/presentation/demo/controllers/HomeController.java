@@ -1,6 +1,5 @@
 package presentation.demo.controllers;
 
-import org.hibernate.TransactionException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +24,7 @@ public class HomeController {
     @GetMapping("/")
     public String index(Model model,@RequestParam(value = "logout",required = false)Boolean logout
             , HttpSession session,@AuthenticationPrincipal Principal principal){
+        session.invalidate();
         model.addAttribute("user",principal);
         Boolean log = logout!=null ? logout : false;
         model.addAttribute("logout",log);

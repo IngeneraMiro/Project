@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/info")
-@PreAuthorize("hasAnyRole('ADMIN','MAIN','NURSE','PATIENT','DOCTOR')")
+@PreAuthorize("hasAnyRole('ADMIN','NURSE','PATIENT','DOCTOR')")
 public class MessageRestController {
     private final MessageService messageService;
     private final Gson json;

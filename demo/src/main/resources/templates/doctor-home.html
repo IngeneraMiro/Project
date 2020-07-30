@@ -38,7 +38,11 @@
                 <input type="radio" id="2" name="user" value="nurse">
                 <label for="2">Добави сестра</label><br>
                 <input type="radio" id="3" name="user" value="pat">
-                <label for="3">Добави пациент</label>
+                <label for="3">Добави пациент</label><br>
+                <input sec:authorize="hasRole('MAIN')" type="radio" id="4" name="user" value="office">
+                <label sec:authorize="hasRole('MAIN')" for="4">Добави офис</label><br>
+                <input sec:authorize="hasRole('MAIN')" type="radio" id="5" name="user" value="del">
+                <label sec:authorize="hasRole('MAIN')" for="5">Премахни офис</label>
                 <div class="input-group ">
                     <button type="submit" class="btn text-white btn-primary d-inline-block mx-3">Изпълни</button>
                 </div>

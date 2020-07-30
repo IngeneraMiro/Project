@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:include="/fragments/header"/>
+<body id="addPracticePage">
+<div id="add">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/navigation"/>
+            </div>
+        </div>
+
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 class="w-100 text-light text-right">Добави офис</h1>
+        </div>
+        <div class="row tm-mt-big">
+            <div class="col-12 mx-auto tm-login-col">
+                <div class="bg-white tm-block">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <form th:object="${officeBindModel}" th:action="@{/offices/add}" th:method="POST"
+                                  class="tm-login-form">
+                                <div class="input-group">
+                                    <label for="address" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Адрес на офиса*</label>
+                                    <input th:field="*{address}" name="address" type="text"  class="form-control validate"
+                                           th:errorclass="bg-danger" id="address" placeholder="Адрес на офиса">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label" for="practice">Лекарска
+                                        практика</label>
+                                    <select th:field="*{practice}" id="practice" class="form-control pt-2 validate">
+                                        <option th:each="p : ${practices}" th:value="${p}"
+                                                th:text="${p}" th:selected="${p}">
+                                            Practices
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="schedule" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">График*</label>
+                                    <input th:field="*{schedule}" name="schedule" type="text"  class="form-control validate"
+                                           th:errorclass="bg-danger" id="schedule" placeholder="График на кабинета">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${#fields.hasErrors('schedule')}" th:errors="*{schedule}" class="text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="phone" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Телефонен номер*</label>
+                                    <input th:field="*{phone}" name="phoneNumber" type="text"  class="form-control validate"
+                                           th:errorclass="bg-danger" id="phone" placeholder="Въведи тел. номер">
+                                    <div class="mx-auto">
+                                        <div>
+                                            <small th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mt-3">
+                                    <div class="mx-auto">
+                                        <small class="text-danger">Всички полета със звездичка са задължителни!</small>
+                                    </div>
+                                </div>
+                                <div class="input-group mt-3 ">
+                                    <button type="submit" class="btn btn-primary d-inline-block mx-auto">Регистрирай</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="/fragments/footer"/>
+    </div>
+</div>
+
+</body>
+</html>
