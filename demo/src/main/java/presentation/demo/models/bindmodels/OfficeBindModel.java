@@ -1,6 +1,7 @@
 package presentation.demo.models.bindmodels;
 
 import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotNull;
 
 public class OfficeBindModel {

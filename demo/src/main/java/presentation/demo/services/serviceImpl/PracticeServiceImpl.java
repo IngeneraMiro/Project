@@ -1,7 +1,6 @@
 package presentation.demo.services.serviceImpl;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import presentation.demo.models.bindmodels.PracticeBindModel;
 import presentation.demo.models.entities.Practice;
