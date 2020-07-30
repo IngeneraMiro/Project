@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:include="/fragments/header"/>
+<body>
+<div id="patient">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <th:block th:include="/fragments/nurse-nav"/>
+            </div>
+        </div>
+        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <h1 th:text="|Здравейте сестра ${nurse.lastName}!|" class="w-100 text-light text-right"></h1>
+        </div>
+    </div>
+    <div class="row mt-3 w-100 text-white text-center">
+        <div id="title1" class="col w-25">
+            <p>Административни функции</p>
+        </div>
+        <div id="title2" class="row w-50 text-center">
+            <P>Оставете съобщение на</P>
+        </div>
+
+        <div id="title4" class="col w-25">
+            <p>Вашите съобщения</p>
+        </div>
+    </div>
+    <div class="row mt-3 w-100 text-white border">
+        <div id="doctor1" class="col w-25 ">
+            <form th:action="@{/nurse/add/{pName}(pName=${nurse.getPractice()})}" th:method="post">
+
+                <input type="radio" id="3" name="user" value="pat">
+                <label for="3">Добави пациент</label><br>
+
+                <div class="input-group ">
+                    <button type="submit" class="btn text-white btn-primary d-inline-block mx-3">Изпълни</button>
+                </div>
+            </form>
+        </div>
+        <div id="doctor2" class="row w-50 text-center ">
+            <div class="col w-50 border-left border-right">
+                <label for="firstName" class="text-left text-white">Име:</label><br>
+                <input name="firstName" type="text" class="form-control validate"
+                       id="firstName" placeholder="Име">
+                <label for="middleName" class="text-left text-white">Презиме:</label><br>
+                <input name="middleName" type="text" class="form-control validate"
+                       id="middleName" placeholder="Презиме">
+                <label for="lastName" class="text-left text-white">Фамилия:</label><br>
+                <input name="lastName" type="text" class="form-control validate"
+                       id="lastName" placeholder="Фамилия">
+            </div>
+            <div class="col w-50">
+                <label class="text-left text-white" for="message">Съобщение:</label>
+                <textarea id="message" type="textarea" class="form-control" rows="5"
+                          placeholder="Съобщение"></textarea>
+                <input type="submit" onclick="send()" class="btn-primary text-white border" value="Изпрати"/>
+            </div>
+        </div>
+        <div id="doctor4" class="col w-25 border-left div-overflow ">
+
+        </div>
+    </div>
+
+    <th:block th:include="/fragments/footer"/>
+</div>
+</body>
+</html>

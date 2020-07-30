@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
    @PostConstruct
     private void init(){
-        if(this.authorityRepository.count()==0){
+        if(begin()){
             for (UserAuthorities a: UserAuthorities.values()){
                 this.authorityRepository.save(new Authority(String.format("ROLE_%s",a.name())));
             }
