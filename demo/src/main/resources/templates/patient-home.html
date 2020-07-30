@@ -11,8 +11,14 @@
                 <th:block th:include="/fragments/patient-nav"/>
             </div>
         </div>
-        <div class="container mt-lg-2 border-right border-bottom bg-transparent h-100">
-            <h1 th:text="|Здравейте ${#session.getAttribute('name')}!|" class="w-100 text-light text-right"></h1>
+        <div class="row container mt-lg-2 border-right border-bottom bg-transparent h-100">
+            <div class="col w-25">
+                <a class="link mt-3" href="#info1">Информация за прегледите</a>
+            </div>
+            <div class="col w-75 ">
+                <h1 th:text="|Здравейте ${#session.getAttribute('name')}!|"
+                    class="w-100 text-light text-right "></h1>
+            </div>
         </div>
         <div class="row w-100 text-white mt-3 ml-3">
             <div class="col w-50">
@@ -30,89 +36,19 @@
                 test
             </div>
         </div>
-
-
+        <div id="info" class="col mt-3 border-top text-white">
+            <p id="first" class="mt-3">Профилактични прегледи:</p>
+            <div id="info1" class="row w-100 "></div>
+            <p id="second" class="mt-3">Диспансерна дейност:</p>
+            <div id="info2" class="row w-100 "></div>
+            <p id="third" class="mt-3">Амбулаторна дейност:</p>
+            <div id="info3" class="row w-100 "></div>
+        </div>
 
     </div>
     <th:block th:include="/fragments/footer"/>
 </div>
-<script>
-    $(document).ready(function () {
-        counter();
-    })
-
-    function counter() {
-        $('#messages').empty();
-        var username = $("#sendername").data('value');
-
-        $.ajax({
-            url: "http://localhost:8080/info/count/" + username, // A valid URL
-            type: 'GET', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
-            success: function (data) {
-                let message = '<p>Имате ' + data + ' непрочетени съобщения!</p>';
-                $("#messages").append(message);
-                var count = data;
-                if (count !== '0') {
-                    getMessage(username);
-                }
-            }
-        });
-    }
-
-    function getMessage(username) {
-        fetch('http://localhost:8080/info/unreaded/' + username).then(responce => responce.json())
-            .then((json) => json.forEach((msg, idx) => {
-
-                let text =
-                    '<button class="message" data-id="'+msg.id+'"><p>От:'+msg.leftFrom+'</p><p>Оставено на:'+msg.leftOn+'</p></button>';
-                $('#messages').append(text);
-            }));
-    };
-
-    $('body').on('click','button.message',function () {
-        let num = $(this).data('id');
-        $.ajax({
-            url: "http://localhost:8080/info/single/" + num, // A valid URL
-            type: 'GET', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
-            success: function (data) {
-                let message = 'От: '+ data.leftFrom +'\n' + data.body +'\n'+ 'Оставено на: ' + data.leftOn;
-                alert(message);
-                counter();
-            },
-            error: function( Xhr, textStatus, errorThrown ){
-                alert( Xhr.responseText);
-            }
-        });
-    });
-
-
-    function send() {
-        let message = document.getElementById("message").value;
-        let sender = $("#sendername").data('value');
-        let recipient = $("#recipientname").data('value');
-
-        if(jQuery.isEmptyObject(message) | message.length<10){
-            window.alert('Съобщението трябва да съдържа поне 10 символа!')
-        }else {
-            if (confirm("Да изпратя ли съобщението?")) {
-
-                let dto = {receive: recipient, sendfrom: sender, mess: message}
-                $.ajax({
-                    url: "http://localhost:8080/info/send", // A valid URL
-                    type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
-                    data: JSON.stringify(dto),
-                    contentType: 'application/json; charset=utf-8',// Some data e.g. Valid JSON as a string
-                    success: function (data) {
-                        alert(data);
-                        $('#message').val('');
-                    },
-                    error: function (Xhr, textStatus, errorThrown) {
-                        alert(Xhr.responseText);
-                    }
-                });
-            }
-        }
-    }
-</script>
+<script src="/js/user-messages-load.js"></script>
+<script src="/js/get-info.js"></script>
 </body>
 </html>

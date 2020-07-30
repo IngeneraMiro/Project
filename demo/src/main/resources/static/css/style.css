@@ -5,6 +5,12 @@ html {
 .border-1{
   border: solid white;
 }
+.link{
+  color: white;
+  text-decoration: none;
+  position: absolute;
+  top: 8px;
+}
 
 .first-col{
   width: 75%;

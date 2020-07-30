@@ -56,4 +56,10 @@ public class AdminController {
     }
 
 
+    @GetMapping("/addinfo")
+    public String infoAdding(){
+
+
+        return "redirect:";
+    }
 }
