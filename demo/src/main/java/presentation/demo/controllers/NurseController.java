@@ -5,13 +5,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import presentation.demo.models.viewmodels.UserControlViewModel;
 import presentation.demo.services.UserService;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
 @Controller
@@ -33,11 +32,15 @@ public class NurseController {
         return "nurse-home";
     }
 
-    @GetMapping("/add/{pName}")
-    public String addUser(@PathVariable(value = "pName")String pName){
+    @PostMapping("/add/{pName}")
+    public String addUser(@RequestParam(value = "user",required = false)String user,
+                          @PathVariable(value = "pName",required = false)String pName ){
 
+        if(user.equals("pat")){
+            return "redirect:/users/register?pName="+ URLEncoder.encode(pName, StandardCharsets.UTF_8);
+        }
 
-        return "";
+        return "redirect:/";
     }
 
 

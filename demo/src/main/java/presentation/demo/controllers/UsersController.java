@@ -59,42 +59,46 @@ public class UsersController {
             model.addAttribute("pName", "empty");
         }
 //  ***  add to view model all active practices to choose from  ***
-        if(pName==null) {
+        if (pName == null) {
             model.addAttribute("practices", this.practiceService.getAllActivePractice());
-        }else{
+        } else {
             model.addAttribute("practices", Collections.singletonList(pName));
         }
-        model.addAttribute("doctors",this.userService.getActiveDoctorsByPractice(pName));
-        model.addAttribute("action","pat");
+        model.addAttribute("doctors", this.userService.getActiveDoctorsByPractice(pName));
+        model.addAttribute("action", "pat");
         return "user-register";
     }
 
     @PostMapping("/register")
     public String regConform(@Valid @ModelAttribute("userBindModel") UserBindModel userBindModel,
-                             BindingResult result, RedirectAttributes redirectAttributes,HttpSession session) {
+                             BindingResult result, RedirectAttributes redirectAttributes, HttpSession session) {
         List<String> authorities = new ArrayList<>(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
         System.out.println(authorities.get(0));
         if (result.hasErrors() || !userBindModel.getPassword().equals(userBindModel.getConfirmPassword())) {
             redirectAttributes.addFlashAttribute("userBindModel", userBindModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userBindModel", result);
-            if(!userBindModel.getPassword().equals(userBindModel.getConfirmPassword())){
-                redirectAttributes.addFlashAttribute("passwornotdmatch",true);
+            if (!userBindModel.getPassword().equals(userBindModel.getConfirmPassword())) {
+                redirectAttributes.addFlashAttribute("passwornotdmatch", true);
             }
-            return "redirect:register?pName="+URLEncoder.encode(userBindModel.getPractice(), StandardCharsets.UTF_8);
+            return "redirect:register?pName=" + URLEncoder.encode(userBindModel.getPractice(), StandardCharsets.UTF_8);
         }
         userBindModel.setAuthority("ROLE_PATIENT");
         try {
             User user = this.userService.addUser(userBindModel);
             switch (authorities.get(0)) {
                 case "ROLE_ADMIN":
-                   redirectAttributes.addFlashAttribute("regNumber",user.getUsername());
-                    String message = String.format("Успешно регистрирахте пациент с регистрационен номер %s",user.getUsername());
-                    redirectAttributes.addFlashAttribute("message",message);
-                    return "redirect:/practices/details?pName="+URLEncoder.encode((String)session.getAttribute("pName"), StandardCharsets.UTF_8);
+                    redirectAttributes.addFlashAttribute("regNumber", user.getUsername());
+                    String message = String.format("Успешно регистрирахте пациент с регистрационен номер %s", user.getUsername());
+                    redirectAttributes.addFlashAttribute("message", message);
+                    return "redirect:/practices/details?pName=" + URLEncoder.encode((String) session.getAttribute("pName"), StandardCharsets.UTF_8);
                 case "ROLE_DOCTOR":
-                    message = String.format("Успешно регистрирахте пациент с регистрационен номер %s",user.getUsername());
-                    redirectAttributes.addFlashAttribute("message",message);
+                    message = String.format("Успешно регистрирахте пациент с регистрационен номер %s", user.getUsername());
+                    redirectAttributes.addFlashAttribute("message", message);
                     return "redirect:/doctor/doctor-home";
+                case "ROLE_NURSE":
+                    message = String.format("Успешно регистрирахте пациент с регистрационен номер %s", user.getUsername());
+                    redirectAttributes.addFlashAttribute("message", message);
+                    return "redirect:/nurse/nurse-home";
                 case "ROLE_ANONYMOUS":
                     redirectAttributes.addFlashAttribute("regNumber", user.getUsername());
                     return "redirect:login";
@@ -110,65 +114,6 @@ public class UsersController {
     @GetMapping("/registerdoc")
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public String registerDoc(Model model, HttpSession session, @AuthenticationPrincipal Principal principal,
-                           @RequestParam(value = "pName", required = false) String pName) {
-
-        //  *** add bindModel to view model if not exist  ***
-        if (!model.containsAttribute("userBindModel")) {
-            model.addAttribute("userBindModel", new UserBindModel());
-            model.addAttribute("userExist", false);
-            model.addAttribute("passwornotdmatch", false);
-        }
-        model.addAttribute("user", principal);
-        if (pName != null) {
-            model.addAttribute("pName", pName);
-        } else {
-            model.addAttribute("pName", "empty");
-        }
-//  ***  add to view model all active practices to choose from  ***
-        if(pName==null) {
-            model.addAttribute("practices", this.practiceService.getAllActivePractice());
-        }else{
-            model.addAttribute("practices", Collections.singletonList(pName));
-        }
-        model.addAttribute("pName",pName);
-        model.addAttribute("actiondoc","doc");
-        return "user-register";
-    }
-
-    @PostMapping("/registerdoc")
-    @PreAuthorize("hasAnyRole('ADMIN','MAIN')")
-    public String regDocConform(@Valid @ModelAttribute("userBindModel") UserBindModel userBindModel,
-                             BindingResult result, RedirectAttributes redirectAttributes,HttpSession session) {
-        List<String> authorities = new ArrayList<>(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
-        System.out.println(authorities.get(0));
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("userBindModel", userBindModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userBindModel", result);
-            return "redirect:registerdoc";
-        }
-        userBindModel.setAuthority("ROLE_DOCTOR");
-        try {
-            User user = this.userService.addUser(userBindModel);
-            switch (authorities.get(0)) {
-                case "ROLE_ADMIN":
-                    String message = String.format("Успешно регистрирахте лекар с регистрационен номер %s",user.getUsername());
-                    redirectAttributes.addFlashAttribute("message",message);
-                    return "redirect:/practices/details?pName="+URLEncoder.encode((String)session.getAttribute("pName"), StandardCharsets.UTF_8);
-                case "ROLE_MAIN":
-                    message = String.format("Успешно регистрирахте лекар с регистрационен номер %s",user.getUsername());
-                    redirectAttributes.addFlashAttribute("message",message);
-                    return "redirect:/doctor/doctor-home";
-                default:
-                    return "redirect:/";
-            }
-        } catch (Error e) {
-            return "redirect:registerDoc"+URLEncoder.encode(DOC_REGISTER_ERROR, StandardCharsets.UTF_8);
-        }
-    }
-
-    @GetMapping("/registernurse")
-    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
-    public String registerNurse(Model model, HttpSession session, @AuthenticationPrincipal Principal principal,
                               @RequestParam(value = "pName", required = false) String pName) {
 
         //  *** add bindModel to view model if not exist  ***
@@ -184,47 +129,106 @@ public class UsersController {
             model.addAttribute("pName", "empty");
         }
 //  ***  add to view model all active practices to choose from  ***
-        if(pName==null) {
+        if (pName == null) {
             model.addAttribute("practices", this.practiceService.getAllActivePractice());
-        }else{
+        } else {
             model.addAttribute("practices", Collections.singletonList(pName));
         }
-        model.addAttribute("pName",pName);
-        model.addAttribute("doctors",this.userService.getActiveDoctorsByPractice(pName));
-        model.addAttribute("actionnurse","nurse");
+        model.addAttribute("pName", pName);
+        model.addAttribute("actiondoc", "doc");
+        return "user-register";
+    }
+
+    @PostMapping("/registerdoc")
+    @PreAuthorize("hasAnyRole('ADMIN','MAIN')")
+    public String regDocConform(@Valid @ModelAttribute("userBindModel") UserBindModel userBindModel,
+                                BindingResult result, RedirectAttributes redirectAttributes, HttpSession session) {
+        List<String> authorities = new ArrayList<>(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
+        System.out.println(authorities.get(0));
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userBindModel", userBindModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userBindModel", result);
+            return "redirect:registerdoc";
+        }
+        userBindModel.setAuthority("ROLE_DOCTOR");
+        try {
+            User user = this.userService.addUser(userBindModel);
+            switch (authorities.get(0)) {
+                case "ROLE_ADMIN":
+                    String message = String.format("Успешно регистрирахте лекар с регистрационен номер %s", user.getUsername());
+                    redirectAttributes.addFlashAttribute("message", message);
+                    return "redirect:/practices/details?pName=" + URLEncoder.encode((String) session.getAttribute("pName"), StandardCharsets.UTF_8);
+                case "ROLE_MAIN":
+                    message = String.format("Успешно регистрирахте лекар с регистрационен номер %s", user.getUsername());
+                    redirectAttributes.addFlashAttribute("message", message);
+                    return "redirect:/doctor/doctor-home";
+                default:
+                    return "redirect:/";
+            }
+        } catch (Error e) {
+            return "redirect:registerDoc" + URLEncoder.encode(DOC_REGISTER_ERROR, StandardCharsets.UTF_8);
+        }
+    }
+
+    @GetMapping("/registernurse")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    public String registerNurse(Model model, HttpSession session, @AuthenticationPrincipal Principal principal,
+                                @RequestParam(value = "pName", required = false) String pName) {
+
+        //  *** add bindModel to view model if not exist  ***
+        if (!model.containsAttribute("userBindModel")) {
+            model.addAttribute("userBindModel", new UserBindModel());
+            model.addAttribute("userExist", false);
+            model.addAttribute("passwornotdmatch", false);
+        }
+        model.addAttribute("user", principal);
+        if (pName != null) {
+            model.addAttribute("pName", pName);
+        } else {
+            model.addAttribute("pName", "empty");
+        }
+//  ***  add to view model all active practices to choose from  ***
+        if (pName == null) {
+            model.addAttribute("practices", this.practiceService.getAllActivePractice());
+        } else {
+            model.addAttribute("practices", Collections.singletonList(pName));
+        }
+        model.addAttribute("pName", pName);
+        model.addAttribute("doctors", this.userService.getActiveDoctorsByPractice(pName));
+        model.addAttribute("actionnurse", "nurse");
         return "user-register";
     }
 
     @PostMapping("/registernurse")
     @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     public String regNurseConform(@Valid @ModelAttribute("userBindModel") UserBindModel userBindModel,
-                                BindingResult result, RedirectAttributes redirectAttributes,HttpSession session) {
+                                  BindingResult result, RedirectAttributes redirectAttributes, HttpSession session) {
         List<String> authorities = new ArrayList<>(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()));
         System.out.println(authorities.get(0));
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("userBindModel", userBindModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userBindModel", result);
 
-            return "redirect:registernurse?pName="+URLEncoder.encode(userBindModel.getPractice(), StandardCharsets.UTF_8);
+            return "redirect:registernurse?pName=" + URLEncoder.encode(userBindModel.getPractice(), StandardCharsets.UTF_8);
         }
         userBindModel.setAuthority("ROLE_NURSE");
         try {
             User user = this.userService.addUser(userBindModel);
             switch (authorities.get(0)) {
                 case "ROLE_ADMIN":
-                    String message = String.format("Успешно регистрирахте сестра с регистрационен номер %s",user.getUsername());
-                    redirectAttributes.addFlashAttribute("message",message);
-                    return "redirect:/practices/details?pName="+URLEncoder.encode((String)session.getAttribute("pName"), StandardCharsets.UTF_8);
+                    String message = String.format("Успешно регистрирахте сестра с регистрационен номер %s", user.getUsername());
+                    redirectAttributes.addFlashAttribute("message", message);
+                    return "redirect:/practices/details?pName=" + URLEncoder.encode((String) session.getAttribute("pName"), StandardCharsets.UTF_8);
                 case "ROLE_DOCTOR":
                 case "ROLE_MAIN":
-                    message = String.format("Успешно регистрирахте сестра с регистрационен номер %s",user.getUsername());
-                    redirectAttributes.addFlashAttribute("message",message);
+                    message = String.format("Успешно регистрирахте сестра с регистрационен номер %s", user.getUsername());
+                    redirectAttributes.addFlashAttribute("message", message);
                     return "redirect:/doctor/doctor-home";
                 default:
                     return "redirect:/";
             }
         } catch (Error e) {
-            return "redirect:registerDoc"+URLEncoder.encode(DOC_REGISTER_ERROR, StandardCharsets.UTF_8);
+            return "redirect:registerDoc" + URLEncoder.encode(DOC_REGISTER_ERROR, StandardCharsets.UTF_8);
         }
     }
 
@@ -259,7 +263,7 @@ public class UsersController {
 
     @GetMapping("role-change")
     @PreAuthorize("hasRole('ADMIN')")
-    public String roleChange(Model model,@AuthenticationPrincipal Principal principal){
+    public String roleChange(Model model, @AuthenticationPrincipal Principal principal) {
 
         model.addAttribute("user", principal);
         return "role-change";

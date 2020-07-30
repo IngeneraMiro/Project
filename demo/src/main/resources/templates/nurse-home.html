@@ -15,12 +15,13 @@
             <h1 th:text="|Здравейте сестра ${nurse.lastName}!|" class="w-100 text-light text-right"></h1>
         </div>
     </div>
+    <input type="hidden" id="username" th:data-value="${nurse.username}">
     <div class="row mt-3 w-100 text-white text-center">
         <div id="title1" class="col w-25">
             <p>Административни функции</p>
         </div>
-        <div id="title2" class="row w-50 text-center">
-            <P>Оставете съобщение на</P>
+        <div id="title2" class="row w-50">
+            <p class="mx-auto">Оставете съобщение на:</p>
         </div>
 
         <div id="title4" class="col w-25">
@@ -29,14 +30,18 @@
     </div>
     <div class="row mt-3 w-100 text-white border">
         <div id="doctor1" class="col w-25 ">
+            <p th:text="${nurse.getPractice()}"></p>
+            <p>Лекар:</p>
+            <p th:text="${nurse.getDocName()}"></p>
+            <p>Медицинска сестра:</p>
+            <p th:text="${nurse.getNurseName()}"></p>
             <form th:action="@{/nurse/add/{pName}(pName=${nurse.getPractice()})}" th:method="post">
-
                 <input type="radio" id="3" name="user" value="pat">
                 <label for="3">Добави пациент</label><br>
-
                 <div class="input-group ">
                     <button type="submit" class="btn text-white btn-primary d-inline-block mx-3">Изпълни</button>
                 </div>
+                <p th:text="${message}"></p>
             </form>
         </div>
         <div id="doctor2" class="row w-50 text-center ">
@@ -65,5 +70,6 @@
 
     <th:block th:include="/fragments/footer"/>
 </div>
+<script src="/js/message-manipulator.js"></script>
 </body>
 </html>
