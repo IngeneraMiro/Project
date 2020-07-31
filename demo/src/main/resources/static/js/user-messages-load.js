@@ -56,13 +56,17 @@ function send() {
         window.alert('Съобщението трябва да съдържа поне 10 символа!')
     } else {
         if (confirm("Да изпратя ли съобщението?")) {
-
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
             let dto = {receive: recipient, sendfrom: sender, mess: message}
             $.ajax({
                 url: "http://localhost:8080/info/send", // A valid URL
                 type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
                 data: JSON.stringify(dto),
                 contentType: 'application/json; charset=utf-8',// Some data e.g. Valid JSON as a string
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
                 success: function (data) {
                     alert(data);
                     $('#message').val('');

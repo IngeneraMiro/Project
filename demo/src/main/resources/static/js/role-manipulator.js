@@ -6,13 +6,21 @@ $(document).ready(function () {
 $('body').on('click','button.normal',function () {
     let username = $(this).data('username');
     let str = '{"username": "'+username+'"}';
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         url: "http://localhost:8080/info/normal/"+username, // A valid URL
         type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
         data: str ,// Some data e.g. Valid JSON as a string
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+        },
         success: function(data) {
             body();
             alert(data);
+        },
+        error: function (Xhr, textStatus, errorThrown) {
+            alert(Xhr.responseText);
         }
     });
 });
@@ -20,13 +28,21 @@ $('body').on('click','button.normal',function () {
 $('body').on('click','button.main',function () {
     let username = $(this).data('username');
     let str = '{"username": "}'+username+'"}';
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         url: "http://localhost:8080/info/main/"+username, // A valid URL
         type: 'PUT', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
         data: str ,// Some data e.g. Valid JSON as a string
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+        },
         success: function(data) {
             body();
             alert(data);
+        },
+        error: function (Xhr, textStatus, errorThrown) {
+            alert(Xhr.responseText);
         }
     });
 

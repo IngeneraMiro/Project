@@ -1,6 +1,7 @@
 package presentation.demo.restcontrollers;
 
 import javassist.NotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,12 @@ public class UserRestController {
     public ResponseEntity<?> makeNormalDoc(@PathVariable(value = "username")String username) throws NotFoundException {
         User user =  this.userService.doNormalDoctor(username);
         return ResponseEntity.ok("Доктор "+user.getLastName()+" вече не е главен лекар!");
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> catchNotFoundEx(NotFoundException ex) {
+        ResponseEntity response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        return response;
     }
 }
 

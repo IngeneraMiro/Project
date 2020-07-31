@@ -47,13 +47,19 @@
             }));
     };
 
-    $('body').on('click','button.id',function () {
+    $('body').on('click', 'button.id', function () {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        alert(token);
         alert("Да изтрия ли офиса?");
         var num = $(this).data('id');
         $.ajax({
             url: "http://localhost:8080/office/del/" + num,// A valid URL
             type: 'DELETE', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
-            success: function(data) {
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function (data) {
                 let message = 'Офисът е изтрит.';
                 alert(message);
                 var Pname = $("#pract").data('value');
@@ -61,8 +67,8 @@
                 getOffices(Pname);
             },
             error: function (Xhr, textStatus, errorThrown) {
-            alert(Xhr.responseText);
-        }
+                alert(Xhr.responseText);
+            }
         });
 
     })
