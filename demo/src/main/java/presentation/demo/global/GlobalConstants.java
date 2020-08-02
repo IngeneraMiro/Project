@@ -9,4 +9,5 @@ public class GlobalConstants {
     public final static String EMPTY_ERROR = "Полето не може да бъде оставено празно!";
     public final static String DOC_REGISTER_ERROR = "Неуспешен опит за регистрация на лекар !";
     public final static String OFFICE_REGISTER_ERROR = "Неуспешен опит за регистрация на офис !";
+    public final static String FILE_ADDRESS = "src\\main\\resources\\static\\files\\log.txt";
 }

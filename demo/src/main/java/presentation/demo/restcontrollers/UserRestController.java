@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import presentation.demo.configurations.annotations.RestMethod;
 import presentation.demo.models.entities.User;
 import presentation.demo.models.viewmodels.UserViewModel;
 import presentation.demo.services.UserService;
@@ -28,12 +29,14 @@ public class UserRestController {
     }
 
     @PutMapping("/main/{username}")
+    @RestMethod(value = "Създаден е главен лекар!")
     public ResponseEntity<?> makeMainDoc(@PathVariable(value = "username")String username) throws NotFoundException {
        User user =  this.userService.addMainDoctor(username);
         return ResponseEntity.ok("Доктор "+user.getLastName()+" вече е главен лекар!");
     }
 
     @PutMapping("/normal/{username}")
+    @RestMethod(value = "Премахнат е главен лекар")
     public ResponseEntity<?> makeNormalDoc(@PathVariable(value = "username")String username) throws NotFoundException {
         User user =  this.userService.doNormalDoctor(username);
         return ResponseEntity.ok("Доктор "+user.getLastName()+" вече не е главен лекар!");

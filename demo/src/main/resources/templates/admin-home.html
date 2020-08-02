@@ -15,41 +15,66 @@
         </div>
         <div class="row container mt-lg-2 border-right border-bottom bg-transparent h-100">
             <div class="col w-25 ">
-                <button id="information" onclick="info()" class="btn text-white btn-primary d-inline-block ml-3">Информация</button></div>
+                <button id="information" onclick="info()" class="btn text-white btn-primary d-inline-block ml-3">Информация</button>
+                <button id="loginfo" onclick="getLog()" class="btn text-white btn-primary d-inline-block ml-3">Log</button>
+            </div>
             <div class="col w-75 ">
                 <h1 class="w-100 text-light text-right ">Здравей админ !</h1>
             </div>
         </div>
-        <input type="hidden" id="sender" th:data-value="${user.name}">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <h3 th:if="${regNumber!=null}" th:text="|Успешно регистрирахте пациент с номер ${regNumber}|" class="info mt-3">
-            zfsdbxb</h3>
-        <div id="test" class="col text-white mt-5" >
 
-        </div>
-
-        <th:block th:include="/fragments/footer"/>
     </div>
+    <input type="hidden" id="sender" th:data-value="${user.name}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <h3 th:if="${regNumber!=null}" th:text="|Успешно регистрирахте пациент с номер ${regNumber}|" class="info mt-3">
+        zfsdbxb</h3>
+    <div id="test" class="col text-white mt-5">
+
+    </div>
+
+    <th:block th:include="/fragments/footer"/>
+</div>
 </div>
 <script>
-    function  info() {
+    function info() {
         $('#test').html("");
-        let str = '<div class="row w-25"><label for="type" class="text-left text-white">Въведи типа на информацията</label><br>'+
-                '<input name="type" size="40" type="text" class="form-control validate"'+
-                'id="type" placeholder="Тип на информацията"></div>'+
-                '<div class="row w-100">'+
-                '<label class="text-left text-white" for="text">Въведи обща информация:</label>'+
-                '<textarea id="text" type="textarea" class="form-control" rows="5"'+
-                'placeholder="информация"></textarea>'+
-                '<input type="submit" onclick="send()" class="btn-primary text-white border" value="Запиши"/>'
+        let str = '<div class="row w-25"><label for="type" class="text-left text-white">Въведи типа на информацията</label><br>' +
+            '<input name="type" size="40" type="text" class="form-control validate"' +
+            'id="type" placeholder="Тип на информацията"></div>' +
+            '<div class="row w-100">' +
+            '<label class="text-left text-white" for="text">Въведи обща информация:</label>' +
+            '<textarea id="text" type="textarea" class="form-control" rows="5"' +
+            'placeholder="информация"></textarea>' +
+            '<input type="submit" onclick="send()" class="btn-primary text-white border" value="Запиши"/>'
         $('#test').append(str);
     };
 
-    function send(){
+    function getLog() {
+        $('#test').html("");
+        $.ajax({
+            url: "http://localhost:8080/information/log", // A valid URL
+            type: 'GET', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            success: function (data) {
+                let text = '<div class="col-md-12 d-flex justify-content-center">' +
+                    '<div class="col-md-8 d-flex justify-content-center">' +
+                    '<textarea class="form-control" id="branches-textarea" rows="10" readonly>' + data + '</textarea>' +
+                    '</div>' + '</div>';
+
+                $('#test').append(text);
+            },
+            error: function (Xhr, textStatus, errorThrown) {
+                alert(Xhr.responseText);
+            }
+        });
+
+    }
+
+
+    function send() {
         let tipo = document.getElementById("type").value;
         let tbody = document.getElementById("text").value;
         let isender = $("#sender").data('value')
-        let dto = {"type": tipo, "body": tbody, "author": isender };
+        let dto = {"type": tipo, "body": tbody, "author": isender};
 
         $.ajax({
             url: "http://localhost:8080/information/new", // A valid URL
@@ -58,7 +83,7 @@
             contentType: 'application/json; charset=utf-8',// Some data e.g. Valid JSON as a string
             success: function (data) {
                 alert(data);
-               $('#test').html("");
+                $('#test').html("");
             },
             error: function (Xhr, textStatus, errorThrown) {
                 alert(Xhr.responseText);

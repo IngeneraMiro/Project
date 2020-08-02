@@ -94,7 +94,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message sendMessage(MessageSendModel model) throws NotFoundException, NoPermissionException {
-       if(model.getReceive().charAt(0)!='N'){
+       if(model.getReceive().charAt(0)!='N' && model.getReceive().charAt(0)!='A'){
            throw new NoPermissionException("Може да изпратите съобщение на медицинската сестра!");
        }
        Message message = new Message();
@@ -104,5 +104,17 @@ public class MessageServiceImpl implements MessageService {
        message.setBody(model.getMess());
        message.setRead(false);
        return this.messageRepository.saveAndFlush(message);
+    }
+
+    @Override
+    public void clearMessages() {
+         LocalDateTime time = LocalDateTime.now().minusMonths(1);
+         this.messageRepository.clearMessages(time);
+    }
+
+    @Override
+    public void clearOldMessages() {
+        LocalDateTime time = LocalDateTime.now().minusMonths(3);
+        this.messageRepository.clearOldMessages(time);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import presentation.demo.utils.fileutil.FileUtil;
+import presentation.demo.utils.fileutil.FileUtilImpl;
 
 @Configuration
 public class BeanConfigurations {
@@ -24,5 +26,10 @@ public class BeanConfigurations {
     @Bean
     public Gson gson(){
         return new GsonBuilder().setPrettyPrinting().create();
+    }
+
+    @Bean
+    public FileUtil fUtil(){
+        return new FileUtilImpl();
     }
 }

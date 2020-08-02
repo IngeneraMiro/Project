@@ -16,4 +16,6 @@ public interface MessageService {
     List<MessageViewModel> getUnreadMessagesByUser(String username);
     MessageViewModel getMessageById(String id) throws NotFoundException;
     Message sendMessage(MessageSendModel model) throws NotFoundException, NoPermissionException;
+    void clearMessages();
+    void clearOldMessages();
 }

@@ -21,11 +21,15 @@ import presentation.demo.services.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static presentation.demo.global.GlobalConstants.FILE_ADDRESS;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -46,7 +50,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
    @PostConstruct
-    private void init(){
+    private void init() throws IOException {
         if(begin()){
             for (UserAuthorities a: UserAuthorities.values()){
                 this.authorityRepository.save(new Authority(String.format("ROLE_%s",a.name())));
@@ -58,6 +62,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.addAuthority(this.authorityRepository.findByAuthority("ROLE_ADMIN"));
             this.userRepository.save(user);
         }
+       File log = new File(FILE_ADDRESS);
+       log.createNewFile();
    }
 
     @Override

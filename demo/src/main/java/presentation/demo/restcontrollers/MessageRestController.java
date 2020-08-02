@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/info")
-@PreAuthorize("hasAnyRole('ADMIN','NURSE','PATIENT','DOCTOR')")
+//@PreAuthorize("hasAnyRole('ADMIN','NURSE','PATIENT','DOCTOR')")
 public class MessageRestController {
     private final MessageService messageService;
     private final Gson json;
@@ -43,6 +43,7 @@ public class MessageRestController {
         return ResponseEntity.ok("Съобщението беше доставено!");
     }
 
+    @CrossOrigin(origins = "http://127.0.0.1:8080")
     @PutMapping("/send")
     public ResponseEntity<?> sendMessage(@RequestBody String body) throws NotFoundException, NoPermissionException {
         String message = "";
