@@ -14,7 +14,6 @@ import presentation.demo.services.InformationService;
 import presentation.demo.utils.fileutil.FileUtil;
 
 import javax.naming.NoPermissionException;
-
 import java.io.IOException;
 
 import static presentation.demo.global.GlobalConstants.FILE_ADDRESS;
