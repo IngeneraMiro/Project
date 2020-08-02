@@ -123,14 +123,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new NotFoundException("Потребител с регистрационен номер "+number+" не беше намерен!");
         }
         return user;
-//        return this.userRepository.findByUsername(number).orElseThrow(()->new UsernameNotFoundException("Потребител с регистрационен номер "+number+" не беше намерен!"));
-    }
-
-    @Override
-    public UserViewModel getUserByUsername(String username) {
-        User user = this.userRepository.findUserWithUsername(username).orElse(null);
-        return this.mapper.map(user,UserViewModel.class);
-    }
+   }
 
     @Override
     public List<UserViewModel> getActiveDoctorsByPractice(String practice) {

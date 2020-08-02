@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import presentation.demo.models.entities.Authority;
 import presentation.demo.models.entities.Practice;
 import presentation.demo.models.entities.User;
+import presentation.demo.models.viewmodels.UserControlViewModel;
 import presentation.demo.repositories.AuthorityRepository;
 import presentation.demo.repositories.UserRepository;
 import presentation.demo.services.PracticeService;
@@ -34,6 +35,8 @@ public class UserServiceTest {
     @Autowired
     ModelMapper mapper;
     private User testUser;
+    private User doctor;
+    private User nurse;
     @Mock
     UserRepository userRepository;
     @Mock
@@ -53,8 +56,14 @@ public class UserServiceTest {
         Authority secondAuthority = new Authority();
         secondAuthority.setId("secondAuthority");
         secondAuthority.setAuthority("ROLE_MAIN");
+        Authority thirdAuthority = new Authority();
+        thirdAuthority.setId("ThirdAuthority");
+        thirdAuthority.setAuthority("ROLE_DOCTOR");
+        Authority fourthAuthority = new Authority();
+        fourthAuthority.setId("fourthAuthority");
         Mockito.when(authorityRepository.findByAuthority("ROLE_ADMIN")).thenReturn(authority);
         Mockito.when(authorityRepository.findByAuthority("ROLE_MAIN")).thenReturn(secondAuthority);
+        Mockito.when(authorityRepository.findByAuthority("ROLE_DOCTOR")).thenReturn(thirdAuthority);
         Practice practice = new Practice();
         practice.setActive(true);
         practice.setName(PRACTICE_NAME);
@@ -65,14 +74,7 @@ public class UserServiceTest {
         practice.setId("firstPractice");
         Mockito.when(practiceService.getByName(PRACTICE_NAME)).thenReturn(practice);
 
-        testUser = new User();
-        testUser.setFirstName(FIRST_NAME);
-        testUser.setLastName(LAST_NAME);
-        testUser.setId("123456789abv");
-        testUser.addAuthority(this.authorityRepository.findByAuthority("ROLE_ADMIN"));
-        testUser.setPractice(this.practiceService.getByName(PRACTICE_NAME));
-        testUser.setPassword("123");
-        testUser.setUsername("A888888");
+        loadTestUsers();
         this.userRepository = Mockito.mock(UserRepository.class);
         this.userService = new UserServiceImpl(this.userRepository, this.authorityRepository, this.practiceService, encoder, mapper);
 
@@ -147,12 +149,12 @@ public class UserServiceTest {
         try {
             this.userService.getByNamesAndPractice("pesho", LAST_NAME, PRACTICE_NAME);
         } catch (NotFoundException e) {
-           Assert.assertEquals(expected,e.getMessage());
+            Assert.assertEquals(expected, e.getMessage());
         }
     }
 
     @Test
-    public void testBeginApplicationTrue(){
+    public void testBeginApplicationTrue() {
 //    Arrange
         Mockito.when(this.userRepository.count()).thenReturn(0L);
 //    Act
@@ -162,7 +164,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testBeginApplicationFail(){
+    public void testBeginApplicationFail() {
 //    Arrange
         Mockito.when(this.userRepository.count()).thenReturn(1L);
 //    Act
@@ -179,11 +181,11 @@ public class UserServiceTest {
 //    Act
         User result = this.userService.getUserByRegNumber("A888888");
         //    Assert
-        Assert.assertEquals(expected,result);
+        Assert.assertEquals(expected, result);
     }
 
     @Test
-    public void testGetUserByRegNumberException(){
+    public void testGetUserByRegNumberException() {
 //    Arrange
         Mockito.when(this.userRepository.findUserWithUsername("A888888")).thenReturn(java.util.Optional.ofNullable(testUser));
         String expected = "Потребител с регистрационен номер A888887 не беше намерен!";
@@ -191,12 +193,63 @@ public class UserServiceTest {
         try {
             this.userService.getUserByRegNumber("A888887");
         } catch (NotFoundException e) {
-            Assert.assertEquals(expected,e.getMessage());
+            Assert.assertEquals(expected, e.getMessage());
         }
+    }
+
+    @Test
+    public void testGetUserControlModel() throws NotFoundException {
+//    Arrange
+        Mockito.when(this.userRepository.findUserWithUsername("A888888")).thenReturn(java.util.Optional.ofNullable(testUser));
+        Mockito.when(this.userRepository.getNurseByDoc(doctor.getUsername())).thenReturn(nurse);
+        UserControlViewModel model = this.mapper.map(testUser,UserControlViewModel.class);
+        model.setDocName("Д-р "+ testUser.getDoctor().getLastName());
+        model.setNurseName("сестра "+nurse.getLastName());
+        model.setNurseNum(nurse.getUsername());
+        model.setPractice(testUser.getPractice().getName());
+//    Act
+        UserControlViewModel result = this.userService.getUserControlModel("A888888");
+//    Assert
+        Assert.assertEquals(model.getDocName(),result.getDocName());
+        Assert.assertEquals(model.getNurseName(),result.getNurseName());
+        Assert.assertEquals(model.getPractice(),result.getPractice());
+        Assert.assertEquals(model.getFirstName(),result.getFirstName());
+        Assert.assertEquals(model.getLastName(),result.getLastName());
+        Assert.assertEquals(model.getUsername(),result.getUsername());
     }
 
 
 
+    private void loadTestUsers(){
+        doctor = new User();
+        doctor.setFirstName("Татяна");
+        doctor.setLastName("Вековска");
+        doctor.setId("123456789hgut");
+        doctor.addAuthority(this.authorityRepository.findByAuthority("ROLE_DOCTOR"));
+        doctor.setPractice(this.practiceService.getByName(PRACTICE_NAME));
+        doctor.setPassword("123");
+        doctor.setUsername("D375820");
+
+        nurse = new User();
+        nurse.setFirstName("Оля");
+        nurse.setLastName("Иванова");
+        nurse.setId("123456789ufka");
+        nurse.addAuthority(this.authorityRepository.findByAuthority("ROLE_DOCTOR"));
+        nurse.setPractice(this.practiceService.getByName(PRACTICE_NAME));
+        nurse.setPassword("123");
+        nurse.setUsername("N936471");
+
+        testUser = new User();
+        testUser.setFirstName(FIRST_NAME);
+        testUser.setLastName(LAST_NAME);
+        testUser.setId("123456789abv");
+        testUser.setDoctor(doctor);
+        testUser.addAuthority(this.authorityRepository.findByAuthority("ROLE_ADMIN"));
+        testUser.setPractice(this.practiceService.getByName(PRACTICE_NAME));
+        testUser.setPassword("123");
+        testUser.setUsername("A888888");
+
+    }
 }
 
 

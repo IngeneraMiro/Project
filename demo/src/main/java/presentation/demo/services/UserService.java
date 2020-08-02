@@ -13,10 +13,10 @@ public interface UserService {
     User addUser(UserBindModel model);
     Boolean begin();
     User getUserByRegNumber(String number) throws NotFoundException;
-    UserViewModel getUserByUsername(String username);
     List<UserViewModel>  getActiveDoctorsByPractice(String practice);
     User addMainDoctor(String username) throws NotFoundException;
     User doNormalDoctor(String username) throws NotFoundException;
     UserControlViewModel getUserControlModel(String username) throws NotFoundException;
     User getByNamesAndPractice(String firstName,String lastName,String pName) throws NotFoundException;
+
 }
