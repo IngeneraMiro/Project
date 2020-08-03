@@ -3,6 +3,8 @@ package presentation.demo.services.serviceImpl;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -106,6 +109,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setIsNurse(true);
         }else {
             user.setIsDoctor(false);
+            user.setIsNurse(false);
         }
 
         return this.userRepository.saveAndFlush(user);

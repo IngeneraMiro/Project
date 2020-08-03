@@ -29,4 +29,8 @@ public interface UserRepository extends JpaRepository<User,String> {
   @Query(value = "select u from User as u where u.doctor.username = ?1 and u.isNurse = true and u.enabled = true ")
   User getNurseByDoc(String docUsername);
 
+  User getByFirstName(String fName);
+
+  @Query(value = "delete from User as u where u.firstName = ?1")
+  void  removeTestByFirstName(String fName);
 }

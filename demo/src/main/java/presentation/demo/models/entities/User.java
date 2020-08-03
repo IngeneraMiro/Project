@@ -69,7 +69,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     public Set<Authority> getAuthorities() {
         return authorities;
     }

@@ -17,18 +17,24 @@ import presentation.demo.models.entities.Authority;
 import presentation.demo.models.entities.Practice;
 import presentation.demo.models.entities.User;
 import presentation.demo.models.viewmodels.UserControlViewModel;
+import presentation.demo.models.viewmodels.UserViewModel;
 import presentation.demo.repositories.AuthorityRepository;
 import presentation.demo.repositories.UserRepository;
 import presentation.demo.services.PracticeService;
 import presentation.demo.services.serviceImpl.UserServiceImpl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class UserServiceTest {
     private static final String FIRST_NAME = "mirko";
     private static final String LAST_NAME = "dege";
     private static final String PRACTICE_NAME = "Витал ООД";
+
 
     @Autowired
     PasswordEncoder encoder;
@@ -218,6 +224,26 @@ public class UserServiceTest {
         Assert.assertEquals(model.getUsername(),result.getUsername());
     }
 
+    @Test
+    public void testGetActiveDoctorsByPractice(){
+//    Arrange
+        List<User> users = new ArrayList<>();
+        users.add(testUser);
+        List<UserViewModel> models = new ArrayList<>();
+        UserViewModel model = this.mapper.map(testUser,UserViewModel.class);
+        Set<String> authorities = testUser.getAuthorities().stream().map(a->a.getAuthority().substring(5)).collect(Collectors.toSet());
+        model.setAuthorities(String.join(", ",authorities));
+        models.add(model);
+        Mockito.when(this.userRepository.getDoctorsByPractice(doctor.getPractice().getName())).thenReturn(users);
+//    Act
+        List<UserViewModel> result = this.userService.getActiveDoctorsByPractice(doctor.getPractice().getName());
+//    Assert
+        Assert.assertEquals(models.size(),result.size());
+        Assert.assertEquals(models.get(0).getAuthorities(),result.get(0).getAuthorities());
+        Assert.assertEquals(models.get(0).getFirstName(),result.get(0).getFirstName());
+        Assert.assertEquals(models.get(0).getLastName(),result.get(0).getLastName());
+        Assert.assertEquals(models.get(0).getUsername(),result.get(0).getUsername());
+    }
 
 
     private void loadTestUsers(){

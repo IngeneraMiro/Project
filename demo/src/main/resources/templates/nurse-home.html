@@ -15,6 +15,7 @@
             <h1 th:text="|Здравейте сестра ${nurse.lastName}!|" class="w-100 text-light text-right"></h1>
         </div>
     </div>
+    <h3 th:if="${message!=null}" th:text="|${message}|" class="info mt-3 text-center text-white"></h3>
     <input type="hidden" id="username" th:data-value="${nurse.username}">
     <div class="row mt-3 w-100 text-white text-center">
         <div id="title1" class="col w-25">
