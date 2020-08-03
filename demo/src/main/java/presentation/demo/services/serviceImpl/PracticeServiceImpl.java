@@ -78,7 +78,6 @@ public class PracticeServiceImpl implements PracticeService {
        practice.setRegNumber(model.getRegNumber());
        practice.setPhoneNumber(model.getPhoneNumber());
        practice.setLogo(model.getLogo());
-       this.practiceRepository.saveAndFlush(practice);
-        return null;
+       return this.practiceRepository.saveAndFlush(practice);
     }
 }
