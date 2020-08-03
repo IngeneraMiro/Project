@@ -18,7 +18,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public Authority getAuthorityById(String authority) {
+    public Authority getAuthorityByAuthority(String authority) {
         return this.authorityRepository.findByAuthority(authority);
     }
 }

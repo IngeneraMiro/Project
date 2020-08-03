@@ -1,53 +1,49 @@
 package presentation.demo.unit;
 
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import presentation.demo.models.entities.Authority;
 import presentation.demo.repositories.AuthorityRepository;
+import presentation.demo.services.AuthorityService;
 import presentation.demo.services.serviceImpl.AuthorityServiceImpl;
 
 @SpringBootTest
 public class AuthorityServiceTest {
-    private static final String AUTHORITY_NAME = "ROLE_ADMIN";
-
-    @Autowired
-    ModelMapper mapper;
-    @InjectMocks
-    AuthorityServiceImpl authorityService;
-    @Mock
-    AuthorityRepository authorityRepository;
 
     private Authority testAuthority;
 
+    @InjectMocks
+    private AuthorityServiceImpl authorityService;
+    @Mock
+    AuthorityRepository authorityRepository;
+    @Mock
+    ModelMapper mapper;
+
     @BeforeEach
     void setup(){
-
-        authorityRepository = Mockito.mock(AuthorityRepository.class);
+        this.authorityRepository = Mockito.mock(AuthorityRepository.class);
+        this.authorityService = new AuthorityServiceImpl(authorityRepository,mapper);
         testAuthority = new Authority();
         testAuthority.setId("firstAuthority");
-        testAuthority.setAuthority(AUTHORITY_NAME);
-        authorityService = new AuthorityServiceImpl(authorityRepository,mapper);
-
-
+        testAuthority.setAuthority("ROLE_ADMIN");
     }
 
     @Test
-    public void testGetAuthorityByName(){
+    public void testGetAuthority(){
 //    Arrange
-        Mockito.when(this.authorityRepository.findByAuthority(AUTHORITY_NAME)).thenReturn(testAuthority);
-        Authority expected = testAuthority;
+        Mockito.when(this.authorityRepository.findByAuthority("ROLE_ADMIN")).thenReturn(testAuthority);
 //    Act
-        Authority result = this.authorityService.getAuthorityById(AUTHORITY_NAME);
+        Authority result = this.authorityService.getAuthorityByAuthority("ROLE_ADMIN");
 //    Assert
-        Assert.assertEquals(expected,result);
+        Assert.assertEquals(testAuthority,result);
     }
+
 
 
 }

@@ -13,5 +13,5 @@ public interface OfficeService {
 
     List<OfficeViewModel> getOfficesByPractice(String pName);
 
-    void deleteOfficeById(String id) throws NotFoundException;
+    boolean deleteOfficeById(String id) throws NotFoundException;
 }

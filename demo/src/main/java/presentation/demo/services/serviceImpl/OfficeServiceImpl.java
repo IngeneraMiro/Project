@@ -40,9 +40,10 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
-    public void deleteOfficeById(String id) throws NotFoundException {
+    public boolean deleteOfficeById(String id) throws NotFoundException {
         if(this.officeRepository.existsById(id)) {
             this.officeRepository.deleteById(id);
+            return true;
         }else {
             throw new NotFoundException("На този адрес няма офис!");
         }

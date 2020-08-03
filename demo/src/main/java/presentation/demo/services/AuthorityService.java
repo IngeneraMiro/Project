@@ -4,6 +4,6 @@ import presentation.demo.models.entities.Authority;
 
 public interface AuthorityService {
 
-    Authority getAuthorityById(String authority);
+    Authority getAuthorityByAuthority(String authority);
 
 }
