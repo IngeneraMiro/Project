@@ -42,8 +42,7 @@ public class InformationServiceTest {
 
     @BeforeEach
     void setup(){
-        this.infoRepository = Mockito.mock(InfoRepository.class);
-        this.userService = Mockito.mock(UserService.class);
+
         this.informationService = new InformationServiceImpl(this.mapper,this.userService,this.infoRepository);
 
         testLoad();

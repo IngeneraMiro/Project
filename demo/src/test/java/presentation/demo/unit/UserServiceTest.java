@@ -54,8 +54,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void setup() {
-        this.practiceService = Mockito.mock(PracticeService.class);
-        this.authorityRepository = Mockito.mock(AuthorityRepository.class);
+
         Authority authority = new Authority();
         authority.setAuthority("ROLE_ADMIN");
         authority.setId("firstAuthority");

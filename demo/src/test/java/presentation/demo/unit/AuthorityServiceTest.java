@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import presentation.demo.models.entities.Authority;
 import presentation.demo.repositories.AuthorityRepository;
-import presentation.demo.services.AuthorityService;
 import presentation.demo.services.serviceImpl.AuthorityServiceImpl;
 
 @SpringBootTest
@@ -27,7 +26,7 @@ public class AuthorityServiceTest {
 
     @BeforeEach
     void setup(){
-        this.authorityRepository = Mockito.mock(AuthorityRepository.class);
+
         this.authorityService = new AuthorityServiceImpl(authorityRepository,mapper);
         testAuthority = new Authority();
         testAuthority.setId("firstAuthority");

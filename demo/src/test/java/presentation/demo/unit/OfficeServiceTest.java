@@ -40,7 +40,6 @@ public class OfficeServiceTest {
 
     @BeforeEach
     void setup() {
-        this.officeRepository = Mockito.mock(OfficeRepository.class);
         testLoad();
         this.officeService = new OfficeServiceImpl(this.officeRepository, this.practiceService, this.mapper);
     }
