@@ -19,6 +19,7 @@ import presentation.demo.models.entities.User;
 import presentation.demo.models.viewmodels.UserControlViewModel;
 import presentation.demo.models.viewmodels.UserViewModel;
 import presentation.demo.repositories.AuthorityRepository;
+import presentation.demo.repositories.InfoRepository;
 import presentation.demo.repositories.UserRepository;
 import presentation.demo.services.PracticeService;
 import presentation.demo.services.serviceImpl.UserServiceImpl;
@@ -47,6 +48,8 @@ public class UserServiceTest {
     UserRepository userRepository;
     @Mock
     AuthorityRepository authorityRepository;
+    @Mock
+    InfoRepository infoRepository;
     @Mock
     PracticeService practiceService;
     @InjectMocks
@@ -81,7 +84,7 @@ public class UserServiceTest {
 
         loadTestUsers();
         this.userRepository = Mockito.mock(UserRepository.class);
-        this.userService = new UserServiceImpl(this.userRepository, this.authorityRepository, this.practiceService, encoder, mapper);
+        this.userService = new UserServiceImpl(this.userRepository, this.authorityRepository, this.infoRepository, this.practiceService, encoder, mapper);
 
     }
 

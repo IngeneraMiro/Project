@@ -62,7 +62,7 @@ public class InformationServiceTest {
     }
 
     @Test
-    public void testSafeInformationException()  {
+    public void testSafeInformationNoPermissionException()  {
 //    Arrenge
         String expected = "Нямате Права да записвате информация!";
         try {
@@ -91,7 +91,7 @@ public class InformationServiceTest {
     }
 
     @Test
-    public void testGetInformationByTypeException() {
+    public void testGetInformationByTypeNotFoundException() {
 //    Arrange
         String expected = "";
         Mockito.when(this.infoRepository.findByType("Test type!")).thenReturn(java.util.Optional.ofNullable(this.information));

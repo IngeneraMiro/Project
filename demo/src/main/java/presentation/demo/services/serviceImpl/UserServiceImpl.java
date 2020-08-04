@@ -3,8 +3,6 @@ package presentation.demo.services.serviceImpl;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,11 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import presentation.demo.models.bindmodels.UserBindModel;
 import presentation.demo.models.entities.Authority;
+import presentation.demo.models.entities.Information;
 import presentation.demo.models.entities.User;
 import presentation.demo.models.entities.UserAuthorities;
 import presentation.demo.models.viewmodels.UserControlViewModel;
 import presentation.demo.models.viewmodels.UserViewModel;
 import presentation.demo.repositories.AuthorityRepository;
+import presentation.demo.repositories.InfoRepository;
 import presentation.demo.repositories.UserRepository;
 import presentation.demo.services.PracticeService;
 import presentation.demo.services.UserService;
@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,15 +37,17 @@ import static presentation.demo.global.GlobalConstants.FILE_ADDRESS;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
+    private final InfoRepository infoRepository;
     private final PracticeService practiceService;
     private final PasswordEncoder encoder;
     private final ModelMapper mapper;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository, PracticeService practiceService, PasswordEncoder encoder, ModelMapper mapper) {
+    public UserServiceImpl(UserRepository userRepository, AuthorityRepository authorityRepository, InfoRepository infoRepository, PracticeService practiceService, PasswordEncoder encoder, ModelMapper mapper) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.infoRepository = infoRepository;
         this.practiceService = practiceService;
         this.encoder = encoder;
         this.mapper = mapper;
@@ -54,7 +55,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
    @PostConstruct
     private void init() throws IOException {
+
         if(begin()){
+            StringBuilder sb = new StringBuilder();
             for (UserAuthorities a: UserAuthorities.values()){
                 this.authorityRepository.save(new Authority(String.format("ROLE_%s",a.name())));
             }
@@ -64,9 +67,45 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             this.userRepository.save(user);
             user.addAuthority(this.authorityRepository.findByAuthority("ROLE_ADMIN"));
             this.userRepository.save(user);
+
+            Information information = new Information();
+            information.setType("Профилактични прегледи");
+            sb.append("Всеки един от вас има право на един профилактичен преглед годишно.При откриване на заболяване" +
+                    ", ще ви насочим към допълнителна специализирана медицинска помощ и лечение.").append(System.lineSeparator())
+                    .append("Децата от 2 до 6 годишна възраст се явяват на профилактични прегледи два пъти годишно, " +
+                            "като се извършват и задължителните за възрастта ваксинации.").append(System.lineSeparator())
+                    .append("Учениците от 7 до 18 годишна възраст подлежат на профилактичен преглед един път годишно." +
+                            "Обикновенно преди началото на учебната година.").append(System.lineSeparator())
+                    .append("Грижа на нашият персинал е да следим за честотата на профилактичните прегледи и предварително" +
+                            " да ви уведомяваме за тях.Затова Ви молим да посещавате редовно вашата персонална страница за да получите актуална информация.");
+            information.setBody(sb.toString());
+            information.setAuthor(user);
+            information.setLeftOn(LocalDateTime.now());
+            this.infoRepository.saveAndFlush(information);
+
+            information = new Information();
+            information.setType("Диспансерна дейност");
+            sb = new StringBuilder();
+            sb.append("При регистриране на хронично заболяване ние ще ви диспансеризираме.Така през определен период ще следим хода" +
+                    " на заболяването и неговото лечение.Не пропускайте при всяка визита да попитате за датата на следващото посещение.");
+            information.setBody(sb.toString());
+            information.setAuthor(user);
+            information.setLeftOn(LocalDateTime.now());
+            this.infoRepository.saveAndFlush(information);
+
+            information = new Information();
+            information.setType("Амбулаторна дейност");
+            sb = new StringBuilder();
+            sb.append("Ежедневно се извършват амбулаторни прегледи на остри и хронични заболявания и техното лечение." +
+                    "При неоходимост издаваме необходимите медицински документи за временна нетрудоспособност," +
+                    " насочваме Ви за допълнителни прегледи и изследвания при специалисти.");
+            information.setBody(sb.toString());
+            information.setAuthor(user);
+            information.setLeftOn(LocalDateTime.now());
+            this.infoRepository.saveAndFlush(information);
+
+            File log = new File(FILE_ADDRESS);
         }
-       File log = new File(FILE_ADDRESS);
-       log.createNewFile();
    }
 
     @Override
@@ -187,4 +226,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return pass;
     }
+
 }
