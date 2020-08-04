@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import presentation.demo.configurations.CustomEventPublisher;
 import presentation.demo.services.PracticeService;
 
 import javax.servlet.http.HttpSession;
@@ -17,14 +18,16 @@ import java.security.Principal;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     private final PracticeService practiceService;
+    private final CustomEventPublisher eventPublisher;
 
-    public AdminController(PracticeService practiceService) {
+    public AdminController(PracticeService practiceService, CustomEventPublisher eventPublisher) {
         this.practiceService = practiceService;
+        this.eventPublisher = eventPublisher;
     }
 
     @GetMapping("/admin-home")
     public String adminHome(Model model, HttpSession session, @AuthenticationPrincipal Principal principal) {
-
+        this.eventPublisher.publishEvent("Admin logged!");
         model.addAttribute("user", principal);
         session.setAttribute("pName", "empty");
         model.addAttribute("practices", this.practiceService.getAllPractices());
