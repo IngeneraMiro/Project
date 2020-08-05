@@ -1,5 +1,6 @@
 package presentation.demo.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ public class AdminController {
     private final PracticeService practiceService;
     private final CustomEventPublisher eventPublisher;
 
+    @Autowired
     public AdminController(PracticeService practiceService, CustomEventPublisher eventPublisher) {
         this.practiceService = practiceService;
         this.eventPublisher = eventPublisher;

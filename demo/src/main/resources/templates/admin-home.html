@@ -56,9 +56,10 @@
             type: 'GET', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
             success: function (data) {
                 let text = '<div class="col-md-12 d-flex justify-content-center">' +
-                    '<div class="col-md-8 d-flex justify-content-center">' +
+                    '<div class="row w-50 d-flex justify-content-center">' +
                     '<textarea class="form-control" id="branches-textarea" rows="10" readonly>' + data + '</textarea>' +
-                    '</div>' + '</div>';
+                    '<button id="clear" onclick="clearLog()" class="btn text-white btn-primary d-inline-block ml-3">Изчисти лога</button>'+
+                    '</div>'+ '</div>';
 
                 $('#test').append(text);
             },
@@ -69,6 +70,25 @@
 
     }
 
+    function clearLog(){
+        alert('Да изчистя ли лога');
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: "http://localhost:8080/information/clear", // A valid URL
+            type: 'DELETE', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function (data) {
+                alert(data);
+                getLog();
+            },
+            error: function (Xhr, textStatus, errorThrown) {
+                alert(Xhr.responseText);
+            }
+        })
+    }
 
     function send() {
         let tipo = document.getElementById("type").value;

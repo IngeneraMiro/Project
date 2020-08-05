@@ -2,7 +2,7 @@ package presentation.demo.configurations;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import presentation.demo.listeners.MyCustomEvent;
+import presentation.demo.customevents.MyCustomEvent;
 
 @Component
 public class CustomEventPublisher {

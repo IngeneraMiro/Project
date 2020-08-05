@@ -16,27 +16,35 @@ import static presentation.demo.global.GlobalConstants.FILE_ADDRESS;
 public class ClearMessages {
     private final MessageService messageService;
 
-    public ClearMessages(MessageService messageService) {
+    public ClearMessages(MessageService messageService){
         this.messageService = messageService;
     }
 
     @Scheduled(cron = "0 0 0 * * *")
     public void clearMessages() throws IOException {
         this.messageService.clearMessages();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ADDRESS,true));
-        writer.write("Старите и прочетени съобщения бяха изтрити" + " " + formatter.format(LocalDateTime.now()));
-        writer.newLine();
-        writer.close();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ADDRESS, true));
+            writer.write("Старите и прочетени съобщения бяха изтрити" + " " + formatter.format(LocalDateTime.now()));
+            writer.newLine();
+            writer.close();
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     @Scheduled(cron = "0 0 0 1 * *")
     public void clearAllOldMessages() throws IOException {
         this.messageService.clearOldMessages();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ADDRESS,true));
-        writer.write("Съобщенията по стари от 3 месеца бяха изтрити" + " " + formatter.format(LocalDateTime.now()));
-        writer.newLine();
-        writer.close();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ADDRESS, true));
+            writer.write("Съобщенията по стари от 3 месеца бяха изтрити" + " " + formatter.format(LocalDateTime.now()));
+            writer.newLine();
+            writer.close();
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
     }
 }

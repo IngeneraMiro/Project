@@ -31,6 +31,7 @@ public class RestInterceptor extends HandlerInterceptorAdapter {
                 writer.write(method.value() + " " + formatter.format(LocalDateTime.now()));
                 writer.newLine();
                 writer.close();
+
             }
         }
     }

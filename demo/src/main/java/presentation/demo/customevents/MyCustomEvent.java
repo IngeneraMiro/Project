@@ -1,4 +1,4 @@
-package presentation.demo.listeners;
+package presentation.demo.customevents;
 
 import org.springframework.context.ApplicationEvent;
 

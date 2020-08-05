@@ -14,7 +14,12 @@ import presentation.demo.services.InformationService;
 import presentation.demo.utils.fileutil.FileUtil;
 
 import javax.naming.NoPermissionException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOError;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static presentation.demo.global.GlobalConstants.FILE_ADDRESS;
 
@@ -52,6 +57,23 @@ public class InformationRestController {
     public String getLog() throws IOException {
     String log = fUtil.readFileContent(FILE_ADDRESS);
       return log;
+    }
+
+    @DeleteMapping("clear")
+    public ResponseEntity<?> clearSystemLog(){
+        System.out.println("Hit rest!");
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ADDRESS));
+            writer.write("Системният лог беше изчистен! "+formatter.format(LocalDateTime.now()));
+            writer.close();
+            writer = new BufferedWriter(new FileWriter(FILE_ADDRESS,true));
+            writer.newLine();
+            writer.close();
+            return ResponseEntity.ok("Системният лог беше изчистен");
+        }catch (IOException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Фаилът не беше намерен!");
+        }
     }
 
 

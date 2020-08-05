@@ -17,7 +17,6 @@ import presentation.demo.models.viewmodels.PracticeViewModel;
 import presentation.demo.repositories.PracticeRepository;
 import presentation.demo.services.serviceImpl.PracticeServiceImpl;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 
 @SpringBootTest
