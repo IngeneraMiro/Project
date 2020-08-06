@@ -18,5 +18,5 @@ public interface UserService {
     User doNormalDoctor(String username) throws NotFoundException;
     UserControlViewModel getUserControlModel(String username) throws NotFoundException;
     User getByNamesAndPractice(String firstName,String lastName,String pName) throws NotFoundException;
-
+    void initApp();
 }
