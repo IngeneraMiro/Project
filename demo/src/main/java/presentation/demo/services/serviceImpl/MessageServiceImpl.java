@@ -117,4 +117,11 @@ public class MessageServiceImpl implements MessageService {
         LocalDateTime time = LocalDateTime.now().minusMonths(3);
         this.messageRepository.clearOldMessages(time);
     }
+
+    @Override
+    public void clearAdminMessages() throws NotFoundException {
+        User user = this
+                .userService.getUserByRegNumber("A888888");
+        this.messageRepository.deleteByAuthor(user);
+    }
 }

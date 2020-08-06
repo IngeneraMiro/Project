@@ -9,6 +9,12 @@ public class MessageSendModel {
     public MessageSendModel() {
     }
 
+    public MessageSendModel(String receive, String mess, String sendfrom) {
+        this.receive = receive;
+        this.mess = mess;
+        this.sendfrom = sendfrom;
+    }
+
     public String getReceive() {
         return receive;
     }

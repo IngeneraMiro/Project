@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/info")
-//@PreAuthorize("hasAnyRole('ADMIN','NURSE','PATIENT','DOCTOR')")
+@PreAuthorize("hasAnyRole('ADMIN','NURSE','PATIENT','DOCTOR')")
 public class MessageRestController {
     private final MessageService messageService;
     private final Gson json;
@@ -63,6 +63,12 @@ public class MessageRestController {
         MessageViewModel message = new MessageViewModel();
         message = this.messageService.getMessageById(id);
         return ResponseEntity.ok(message);
+    }
+
+    @DeleteMapping("admin")
+    public ResponseEntity<?> deleteAllAdminMessages() throws NotFoundException {
+        this.messageService.clearAdminMessages();
+        return ResponseEntity.ok("message cleared");
     }
 
     @ExceptionHandler(NotFoundException.class)

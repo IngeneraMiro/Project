@@ -18,4 +18,5 @@ public interface MessageService {
     Message sendMessage(MessageSendModel model) throws NotFoundException, NoPermissionException;
     void clearMessages();
     void clearOldMessages();
+    void clearAdminMessages() throws NotFoundException;
 }
