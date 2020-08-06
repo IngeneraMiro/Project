@@ -61,7 +61,6 @@ public class InformationRestController {
 
     @DeleteMapping("clear")
     public ResponseEntity<?> clearSystemLog(){
-        System.out.println("Hit rest!");
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_ADDRESS));

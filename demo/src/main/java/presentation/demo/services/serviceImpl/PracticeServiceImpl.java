@@ -53,7 +53,8 @@ public class PracticeServiceImpl implements PracticeService {
         Practice practice = this.mapper.map(model, Practice.class);
         practice.setCreatedOn(LocalDateTime.now());
         practice.setActive(true);
-        return this.mapper.map(this.practiceRepository.save(practice),PracticeViewModel.class);
+        Practice result = this.practiceRepository.saveAndFlush(practice);
+        return this.mapper.map(result,PracticeViewModel.class);
     }
 
     @Override

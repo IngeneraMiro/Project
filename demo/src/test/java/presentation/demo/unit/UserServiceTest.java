@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import presentation.demo.models.bindmodels.UserBindModel;
 import presentation.demo.models.entities.Authority;
 import presentation.demo.models.entities.Practice;
 import presentation.demo.models.entities.User;
@@ -88,6 +89,25 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void testAddUser(){
+//    Arrange
+        User expected = testUser;
+        UserBindModel model = this.mapper.map(testUser,UserBindModel.class);
+        model.setConfirmPassword(model.getPassword());
+        model.setDoctor(testUser.getDoctor().getLastName());
+        model.setPractice(testUser.getPractice().getName());
+        model.setAuthority(testUser.getAuthorities().iterator().next().getAuthority());
+        Mockito.when(this.userRepository.getDoctorFromPractice(model.getDoctor(),PRACTICE_NAME)).thenReturn(doctor);
+        Mockito.when(this.userRepository.saveAndFlush(Mockito.any(User.class))).thenReturn(testUser);
+//    Act
+        User result = this.userService.addUser(model);
+//    Assert
+        Assert.assertEquals(expected.getFirstName(),result.getFirstName());
+        Assert.assertEquals(expected.getDoctor(),result.getDoctor());
+        Assert.assertEquals(expected.getPractice(),result.getPractice());
+
+    }
 
     @Test
     public void checkLoadUserByUserName() {

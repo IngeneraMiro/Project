@@ -44,8 +44,40 @@ public class PracticeServiceTest {
     }
 
     @Test
-    public void testFindPracticeByName(){
+    public void testGetByName(){
+//    Arrange
+        Practice expected = sPractice;
+        Mockito.when(this.practiceRepository.findByName(sPractice.getName())).thenReturn(sPractice);
+//    Act
+        Practice result = this.practiceService.getByName(sPractice.getName());
+//    Assert
+        Assert.assertEquals(expected,result);
+    }
 
+    @Test
+    public void testAddPractice(){
+//    Arrenge
+        PracticeViewModel expected = viewModel;
+        Mockito.when(this.practiceRepository.saveAndFlush(Mockito.any(Practice.class))).thenReturn(sPractice);
+//    Act
+        PracticeViewModel result = this.practiceService.addPractice(bindModel);
+//    Assert
+        Assert.assertEquals(expected.getRegNumber(),result.getRegNumber());
+        Assert.assertEquals(expected.getId(),result.getId());
+        Assert.assertEquals(expected.getName(),result.getName());
+    }
+
+    @Test
+    public void testFindPracticeByName(){
+//    Arrange
+        PracticeDetailsModel expected = detailsModel;
+        Mockito.when(this.practiceRepository.findByName(sPractice.getName())).thenReturn(sPractice);
+//    Act
+        PracticeDetailsModel result = this.practiceService.getPracticeByName(sPractice.getName());
+//    Assert
+        Assert.assertEquals(expected.getName(),result.getName());
+        Assert.assertEquals(expected.getRegNumber(),result.getRegNumber());
+        Assert.assertEquals(expected.getPhoneNumber(),result.getPhoneNumber());
     }
 
     @Test
