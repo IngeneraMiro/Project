@@ -52,4 +52,10 @@ public class InformationServiceImpl implements InformationService {
 
        return this.mapper.map(info,InformationViewModel.class);
     }
+
+    @Override
+    public boolean deleteInformation(String type) {
+        this.infoRepository.deleteByType(type);
+        return true;
+    }
 }

@@ -12,4 +12,6 @@ public interface InformationService {
     Information saveInfo(InformationBindModel model) throws NoPermissionException, NotFoundException;
 
     InformationViewModel getInfoByType(String type) throws NotFoundException;
+
+    boolean deleteInformation(String type);
 }

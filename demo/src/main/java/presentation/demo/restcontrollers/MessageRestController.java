@@ -36,7 +36,6 @@ public class MessageRestController {
     @PutMapping("/new")
     @PreAuthorize("permitAll")
     public ResponseEntity<?> leftNewMessage(@RequestBody String body) throws NoPermissionException, NotFoundException {
-        String message = "";
         MessageBindModel model = json.fromJson(body, MessageBindModel.class);
         this.messageService.leaveMessage(model);
 
@@ -46,7 +45,6 @@ public class MessageRestController {
     @CrossOrigin(origins = "http://127.0.0.1:8080")
     @PutMapping("/send")
     public ResponseEntity<?> sendMessage(@RequestBody String body) throws NotFoundException, NoPermissionException {
-        String message = "";
         MessageSendModel model = json.fromJson(body,MessageSendModel.class);
         this.messageService.sendMessage(model);
         return ResponseEntity.ok("Съобщението беше доставено!");
@@ -60,7 +58,7 @@ public class MessageRestController {
 
     @GetMapping("/single/{id}")
     public ResponseEntity<?> getSingleMessage(@PathVariable(value = "id") String id) throws NotFoundException {
-        MessageViewModel message = new MessageViewModel();
+        MessageViewModel message;
         message = this.messageService.getMessageById(id);
         return ResponseEntity.ok(message);
     }

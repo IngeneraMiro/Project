@@ -169,6 +169,24 @@ public class MessageServiceTest {
     }
 
     @Test
+    public void TestLeaveMessageNotFound() throws NotFoundException, NoPermissionException {
+//    Arrange
+        bindModel.setFname(nurse.getFirstName());
+        bindModel.setTname("Георгиева");
+        String expected = "Не намерихме потребител с тези имена!";
+        Mockito.when(this.userService.getUserByRegNumber(sender.getUsername())).thenReturn(sender);
+        Mockito.when(this.userService.getByNamesAndPractice(nurse.getFirstName(),nurse.getLastName(),practice.getName())).thenReturn(nurse);
+        Mockito.when(this.messageRepository.saveAndFlush(Mockito.any(Message.class))).thenReturn(testMessage);
+//    Act/Ассерт
+        try {
+            this.messageService.leaveMessage(bindModel);
+        }catch (NotFoundException e){
+            Assert.assertEquals(expected,e.getMessage());
+        }
+
+    }
+
+    @Test
     public void testSendMessage() throws NotFoundException, NoPermissionException {
 //    Arrange
         Message expected = testMessage;
@@ -196,6 +214,21 @@ public class MessageServiceTest {
             Assert.assertEquals(expected,e.getMessage());
         }
 
+    }
+
+    @Test
+    public void testClearAdminMessages() throws NotFoundException {
+        Assert.assertTrue(this.messageService.clearAdminMessages());
+    }
+
+    @Test
+    public void testClearOldMessages() throws NotFoundException {
+        Assert.assertTrue(this.messageService.clearOldMessages());
+    }
+
+    @Test
+    public void testClearUnreadOldMessages() throws NotFoundException {
+        Assert.assertTrue(this.messageService.clearMessages());
     }
 
     void testLoad(){

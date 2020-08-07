@@ -44,6 +44,9 @@ public class MessageServiceImpl implements MessageService {
         User user = userService.getUserByRegNumber(model.getSendfrom());
         try {
             recipient = this.userService.getByNamesAndPractice(model.getFname(), model.getTname(), user.getPractice().getName());
+            if(recipient==null){
+                throw new NotFoundException("Не намерихме потребител с тези имена!");
+            }
             message.setRecipient(recipient);
         } catch (NotFoundException e) {
             throw new NotFoundException(e.getMessage());
@@ -107,21 +110,24 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void clearMessages() {
+    public boolean clearMessages() {
          LocalDateTime time = LocalDateTime.now().minusMonths(1);
          this.messageRepository.clearMessages(time);
+         return true;
     }
 
     @Override
-    public void clearOldMessages() {
+    public boolean clearOldMessages() {
         LocalDateTime time = LocalDateTime.now().minusMonths(3);
         this.messageRepository.clearOldMessages(time);
+        return true;
     }
 
     @Override
-    public void clearAdminMessages() throws NotFoundException {
+    public boolean clearAdminMessages() throws NotFoundException {
         User user = this
                 .userService.getUserByRegNumber("A888888");
         this.messageRepository.deleteByAuthor(user);
+        return true;
     }
 }

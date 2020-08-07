@@ -9,6 +9,12 @@ public class InformationBindModel {
     public InformationBindModel() {
     }
 
+    public InformationBindModel(String type, String body, String author) {
+        this.type = type;
+        this.body = body;
+        this.author = author;
+    }
+
     public String getType() {
         return type;
     }

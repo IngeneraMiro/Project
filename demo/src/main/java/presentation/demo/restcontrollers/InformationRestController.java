@@ -53,6 +53,12 @@ public class InformationRestController {
         return model.getBody();
     }
 
+    @DeleteMapping("/delete/{type}")
+    public ResponseEntity<?> deleteInformation(@PathVariable(value = "type")String type){
+        this.informationService.deleteInformation(type);
+        return ResponseEntity.ok("Information has been deleted");
+    }
+
     @GetMapping("/log")
     public String getLog() throws IOException {
     String log = fUtil.readFileContent(FILE_ADDRESS);

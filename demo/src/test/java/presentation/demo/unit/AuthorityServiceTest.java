@@ -14,33 +14,33 @@ import presentation.demo.services.serviceImpl.AuthorityServiceImpl;
 
 @SpringBootTest
 public class AuthorityServiceTest {
-
     private Authority testAuthority;
 
-    @InjectMocks
-    private AuthorityServiceImpl authorityService;
     @Mock
     AuthorityRepository authorityRepository;
     @Mock
     ModelMapper mapper;
+    @InjectMocks
+    private AuthorityServiceImpl authorityService;
 
     @BeforeEach
     void setup(){
-
-        this.authorityService = new AuthorityServiceImpl(authorityRepository,mapper);
         testAuthority = new Authority();
         testAuthority.setId("firstAuthority");
         testAuthority.setAuthority("ROLE_ADMIN");
+
+        this.authorityService = new AuthorityServiceImpl(authorityRepository,mapper);
     }
 
     @Test
     public void testGetAuthority(){
 //    Arrange
+        Authority expected = testAuthority;
         Mockito.when(this.authorityRepository.findByAuthority("ROLE_ADMIN")).thenReturn(testAuthority);
 //    Act
         Authority result = this.authorityService.getAuthorityByAuthority("ROLE_ADMIN");
 //    Assert
-        Assert.assertEquals(testAuthority,result);
+        Assert.assertEquals(expected,result);
     }
 
 
