@@ -42,7 +42,6 @@ public class InformationServiceTest {
 
     @BeforeEach
     void setup(){
-
         this.informationService = new InformationServiceImpl(this.mapper,this.userService,this.infoRepository);
 
         testLoad();

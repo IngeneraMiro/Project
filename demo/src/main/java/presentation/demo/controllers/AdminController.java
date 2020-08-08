@@ -29,7 +29,8 @@ public class AdminController {
 
     @GetMapping("/admin-home")
     public String adminHome(Model model, HttpSession session, @AuthenticationPrincipal Principal principal) {
-        this.eventPublisher.publishEvent("Admin logged!");
+        String message = principal.getName() + " has been logged as admin" ;
+        this.eventPublisher.publishEvent(message);
         model.addAttribute("user", principal);
         session.setAttribute("pName", "empty");
         model.addAttribute("practices", this.practiceService.getAllPractices());
