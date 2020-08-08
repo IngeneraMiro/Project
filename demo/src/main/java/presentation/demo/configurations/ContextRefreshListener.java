@@ -15,7 +15,7 @@ public class ContextRefreshListener implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("APPLICATION IS RUNNIG !!!");
+        System.out.println("APPLICATION IS RUNNING !!!");
         this.userService.initApp();
     }
 }
