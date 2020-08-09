@@ -9,10 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import presentation.demo.models.bindmodels.UserBindModel;
-import presentation.demo.models.entities.Authority;
-import presentation.demo.models.entities.Information;
-import presentation.demo.models.entities.User;
-import presentation.demo.models.entities.UserAuthorities;
+import presentation.demo.models.entities.*;
 import presentation.demo.models.viewmodels.UserControlViewModel;
 import presentation.demo.models.viewmodels.UserViewModel;
 import presentation.demo.repositories.AuthorityRepository;
@@ -111,6 +108,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findUserWithUsername(username).orElseThrow(() -> new UsernameNotFoundException("Потребител с регистрационен номер " + username + " не беше намерен!"));
+        if(!user.getAuthorities().iterator().next().getAuthority().equals("ROLE_ADMIN") && !user.getPractice().isActive()){
+          throw new UsernameNotFoundException("Потребител с регистрационен номер " + username + " не беше намерен!");
+        }
         return user;
     }
 
