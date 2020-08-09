@@ -3,6 +3,7 @@ package presentation.demo.services.serviceImpl;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import presentation.demo.configurations.CustomEventPublisher;
 import presentation.demo.models.bindmodels.MessageBindModel;
 import presentation.demo.models.bindmodels.MessageSendModel;
 import presentation.demo.models.entities.Message;
@@ -24,12 +25,14 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final UserService userService;
     private final ModelMapper mapper;
+    private final CustomEventPublisher eventPublisher;
 
 
-    public MessageServiceImpl(MessageRepository messageRepository, UserService userService, ModelMapper mapper) {
+    public MessageServiceImpl(MessageRepository messageRepository, UserService userService, ModelMapper mapper, CustomEventPublisher eventPublisher) {
         this.messageRepository = messageRepository;
         this.userService = userService;
         this.mapper = mapper;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -106,7 +109,9 @@ public class MessageServiceImpl implements MessageService {
        message.setLeftAt(LocalDateTime.now());
        message.setBody(model.getMess());
        message.setRead(false);
-       return this.messageRepository.saveAndFlush(message);
+       Message leftMessage =  this.messageRepository.saveAndFlush(message);
+       this.eventPublisher.publishMessageNotification("остави съобщение",leftMessage.getAuthor().getFirstName()+" "+leftMessage.getAuthor().getLastName());
+       return leftMessage;
     }
 
     @Override

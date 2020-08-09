@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({PersistenceException.class})
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ModelAndView globalPersistenceErrorHandling(PersistenceException e){
         System.out.println(Arrays.toString(e.getStackTrace()));
         ModelAndView view = new ModelAndView("global-errors");
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({TransactionException.class})
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ModelAndView globalTransactionErrorHandling(TransactionException e){
         System.out.println(Arrays.toString(e.getStackTrace()));
         ModelAndView view = new ModelAndView("global-errors");

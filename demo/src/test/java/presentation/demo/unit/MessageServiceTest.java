@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import presentation.demo.configurations.CustomEventPublisher;
+import presentation.demo.customevents.MessageEvent;
 import presentation.demo.models.bindmodels.MessageBindModel;
 import presentation.demo.models.bindmodels.MessageSendModel;
 import presentation.demo.models.entities.Authority;
@@ -44,6 +46,8 @@ public class MessageServiceTest {
 
     @Autowired
     ModelMapper mapper;
+    @Autowired
+    CustomEventPublisher eventPublisher;
     @Mock
     MessageRepository messageRepository;
     @Mock
@@ -80,7 +84,7 @@ public class MessageServiceTest {
         practice.setId("firstPractice");
         Mockito.when(practiceService.getByName(PRACTICE_NAME)).thenReturn(practice);
         testLoad();
-        this.messageService = new MessageServiceImpl(this.messageRepository,this.userService,this.mapper);
+        this.messageService = new MessageServiceImpl(this.messageRepository,this.userService,this.mapper, this.eventPublisher);
     }
 
     @Test

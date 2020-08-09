@@ -1,7 +1,9 @@
 package presentation.demo.configurations;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import presentation.demo.customevents.MessageEvent;
 import presentation.demo.customevents.MyCustomEvent;
 
 import java.io.BufferedWriter;
@@ -27,4 +29,5 @@ public class MyCustomEvenListener implements ApplicationListener<MyCustomEvent> 
             System.out.println(e.getMessage());
         }
     }
+
 }

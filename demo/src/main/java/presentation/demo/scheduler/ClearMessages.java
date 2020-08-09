@@ -20,7 +20,7 @@ public class ClearMessages {
         this.messageService = messageService;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void clearMessages() throws IOException {
         this.messageService.clearMessages();
         try {
